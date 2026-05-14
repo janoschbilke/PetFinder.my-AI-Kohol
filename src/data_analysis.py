@@ -5,9 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
-DATA_ROOT = Path("~/.cache/kagglehub/competitions/petfinder-adoption-prediction").expanduser()
-TRAIN_CSV = DATA_ROOT / "train" / "train.csv"
-TRAIN_IMAGES_DIR = DATA_ROOT / "train_images"
+from src.data import get_data_root
 
 ADOPTION_SPEED_LABELS = {
     0: "Same day",
@@ -23,7 +21,9 @@ HEALTH_LABELS = {0: "Not specified", 1: "Healthy", 2: "Minor injury", 3: "Seriou
 VACCINATED_LABELS = {1: "Yes", 2: "No", 3: "Not sure"}
 
 def run(force: bool = False) -> None:
-    df = pd.read_csv(TRAIN_CSV)
+    data_root = get_data_root()
+    train_csv = data_root / "train" / "train.csv"
+    df = pd.read_csv(train_csv)
     n = len(df)
     print(f"Total training samples: {n}")
 

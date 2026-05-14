@@ -1,8 +1,6 @@
 [project]
 name = "petfinder-my-ai-kohol"
 version = "0.1.0"
-description = "Add your description here"
-readme = "README.md"
 description = "PetFinder.my adoption speed prediction"
 readme = "documentation/README.md"
 requires-python = ">=3.13"

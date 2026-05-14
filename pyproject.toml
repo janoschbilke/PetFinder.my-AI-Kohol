@@ -3,7 +3,13 @@ name = "petfinder-my-ai-kohol"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
+description = "PetFinder.my adoption speed prediction"
+readme = "documentation/README.md"
 requires-python = ">=3.13"
 dependencies = [
     "kagglehub>=1.0.1",
+    "pandas>=2.0.0",
+    "numpy>=1.26.0",
+    "matplotlib>=3.8.0",
+    "seaborn>=0.13.0",
 ]

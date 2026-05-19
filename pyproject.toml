@@ -12,4 +12,5 @@ dependencies = [
     "tqdm>=4.66.0",
     "matplotlib>=3.8.0",
     "seaborn>=0.13.0",
-]    "kaggle>=2.1.2",
+    "kaggle>=2.1.2",
+]

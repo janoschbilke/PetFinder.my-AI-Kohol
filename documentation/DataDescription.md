@@ -52,4 +52,13 @@
 4. Add Metadata and stuff?
 5. PREDICT
 
-## In Total: 58311 Images, 14994 Pets
+> In Total: 58311 Images, 14994 Pets
+
+## Feedback Sessions
+
+### Session 1: 15.05
+
+- "Start small, go bigger later"
+  - Only Dog/Cats first
+  - Use Tabular Data first (and maybe the metadatas and senitments), use images later
+  - Start off with Random Forest Classificiation Models

@@ -39,24 +39,26 @@ Every pet is represented as a single flat row built from four blocks:
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                        FULL FEATURE VECTOR (1 row per pet)                  │
 ├──────────────────────────┬──────────────────────────────────────────────────┤
-│ BLOCK A — Tabular        │                                                  │
-│ (from train.csv)         │                                                  │
-│                          │  Numeric (kept as-is):                           │
-│                          │    Age, Breed1, Breed2, Quantity,                │
+│ BLOCK A — Tabular        │  Numeric (kept as-is): 5 (6) cols                │
+│ (from train.csv)         │    Age, Quantity,                                │
 │                          │    Fee, VideoAmt, PhotoAmt                       │
-│                          │    RescuerID (label-encoded)                     │
+│                          │    AdoptionSpeed (label)                         │
 │                          │                                                  │
-│                          │  One-hot encoded:                                │
-│                          │    Type          → 2 cols                        │
-│                          │    Gender        → 3 cols                        │
-│                          │    Color1/2/3    → ~7 cols each (~21 total)      │
-│                          │    State         → ~15 cols                      │
-│                          │    Vaccinated    → 3 cols                        │
-│                          │    Dewormed      → 3 cols                        │
-│                          │    Sterilized    → 3 cols                        │
-│                          │    Health        → 4 cols                        │
-│                          │    MaturitySize  → 5 cols                        │
-│                          │    FurLength     → 4 cols                        │
+│                          │    One-hot encoded: 33 cols                      │
+│                          │    Type          → 1 cols                        │
+│                          │    Gender        → 2 cols                        │
+│                          │    State         → 14 cols                       │
+│                          │    Vaccinated    → 2 cols                        │
+│                          │    Dewormed      → 2 cols                        │
+│                          │    Sterilized    → 2 cols                        │
+│                          │    Health        → 3 cols                        │
+│                          │    MaturitySize  → 4 cols                        │
+│                          │    FurLength     → 3 cols                        │
+│                          │                                                  │
+│                          │    Mutli-hot endoced: 314 cols                   │
+│                          │    Breed   → 307 cols                            │
+│                          │    Color   → 7 cols                              │
+│                          │                                                  │
 ├──────────────────────────┼──────────────────────────────────────────────────┤
 │ BLOCK B — Sentiment      │ 5 columns                                        │
 │ (from train_sentiment/)  │                                                  │
@@ -80,10 +82,10 @@ Every pet is represented as a single flat row built from four blocks:
 │ BLOCK D — CNN Embeddings │ embedding_size columns (depends on backbone)     │
 │ (from train_images/)     │                                                  │
 │                          │  Mean-pooled across all images per pet           │
-│                          │  embed_0, embed_1, …, embed_{N-1}               │
+│                          │  embed_0, embed_1, …, embed_{N-1}                │
 └──────────────────────────┴──────────────────────────────────────────────────┘
 
-TOTAL WIDTH (AlexNet):  ~80 + 5 + 8 + 4096  ≈  4,189 columns per pet
+TOTAL WIDTH (AlexNet):  5 + 33 + 307 + 5 + 8 + 4096  ≈  4,454 columns per pet
 ```
 
 -> LightGBM with L1 regularisation (`reg_alpha > 0`) for feature selection

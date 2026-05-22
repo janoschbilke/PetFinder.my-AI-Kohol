@@ -3,6 +3,7 @@ import argparse
 from src import (
     data,
     data_analysis,
+    preprocessing,
 )
 
 
@@ -13,6 +14,8 @@ def main(force: bool = False) -> None:
     print("\nStep 1: Data Analysis")
     data_analysis.run(force=force)
 
+    print("\nStep 2: Preprocessing")
+    preprocessing.run(force=force)
 
 
 if __name__ == "__main__":

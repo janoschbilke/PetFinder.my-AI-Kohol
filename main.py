@@ -3,6 +3,9 @@ import argparse
 from src import (
     data,
     data_analysis,
+    evaluate,
+    image_embeddings,
+    model,
     preprocessing,
 )
 
@@ -16,6 +19,17 @@ def main(force: bool = False) -> None:
 
     print("\nStep 2: Preprocessing")
     preprocessing.run(force=force)
+
+    print("\nStep 3: Image Embeddings")
+    image_embeddings.run(force=force)
+
+    print("\nStep 4: Model Training & Prediction")
+    model.run(force=force)
+
+    print("\nStep 5: Evaluation")
+    evaluate.run(force=force)
+
+    print("\nPipeline complete.")
 
 
 if __name__ == "__main__":

@@ -218,4 +218,6 @@ __marimo__/
 .streamlit/secrets.toml
 cache/
 submission*.csv
+feature_importance.png
+confusion_matrix.png
 data_analysis.png

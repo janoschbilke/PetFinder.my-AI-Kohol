@@ -1,9 +1,11 @@
 import argparse
 import json
+import pickle
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from sklearn.decomposition import PCA
 from tqdm import tqdm
 
 from src.data import get_data_root
@@ -18,6 +20,8 @@ OHE_COLS = [
 COLOR_COLS = ["Color1", "Color2", "Color3"]
 BREED_COLS = ["Breed1", "Breed2"]
 DROP_COLS = ["Name", "Description", "AdoptionSpeed", "RescuerID"]
+
+BREED_PCA_COMPONENTS = 15
 
 OHE_DROP_CATEGORIES: dict[str, int] = {
     "Vaccinated":   3,
@@ -153,7 +157,54 @@ def multi_hot_encode(
     return pd.DataFrame(result_dict, index=df.index)
 
 
-def build_features(df: pd.DataFrame, sentiment_dir: Path, metadata_dir: Path, data_root: Path) -> pd.DataFrame:
+def apply_breed_pca(
+    train_breed_df: pd.DataFrame,
+    test_breed_df: pd.DataFrame,
+    n_components: int = BREED_PCA_COMPONENTS,
+) -> tuple[pd.DataFrame, pd.DataFrame, PCA]:
+    """Apply PCA to breed multi-hot columns to reduce sparsity.
+
+    PCA is fitted on the training data only and applied to both train and test
+    to avoid data leakage.
+
+    Args:
+        train_breed_df: Multi-hot breed DataFrame for training set (~307 columns)
+        test_breed_df: Multi-hot breed DataFrame for test set (same columns)
+        n_components: Number of PCA components to keep
+
+    Returns:
+        Tuple of (train_pca_df, test_pca_df, fitted_pca_object)
+    """
+    # Ensure test has the same columns as train (fill missing with 0)
+    missing_cols = set(train_breed_df.columns) - set(test_breed_df.columns)
+    if missing_cols:
+        for col in missing_cols:
+            test_breed_df[col] = 0.0
+    extra_cols = set(test_breed_df.columns) - set(train_breed_df.columns)
+    if extra_cols:
+        test_breed_df = test_breed_df.drop(columns=list(extra_cols))
+
+    # Align column order
+    test_breed_df = test_breed_df[train_breed_df.columns]
+
+    # Fit PCA on training data only
+    pca = PCA(n_components=n_components, random_state=42)
+    train_pca = pca.fit_transform(train_breed_df.values)
+    test_pca = pca.transform(test_breed_df.values)
+
+    # Create DataFrames with named columns
+    pca_col_names = [f"Breed_PCA_{i}" for i in range(n_components)]
+    train_pca_df = pd.DataFrame(train_pca, index=train_breed_df.index, columns=pca_col_names)
+    test_pca_df = pd.DataFrame(test_pca, index=test_breed_df.index, columns=pca_col_names)
+
+    explained_var = pca.explained_variance_ratio_.sum()
+    print(f"  Breed PCA: {train_breed_df.shape[1]} cols → {n_components} components "
+          f"(explained variance: {explained_var:.1%})")
+
+    return train_pca_df, test_pca_df, pca
+
+
+def build_features(df: pd.DataFrame, sentiment_dir: Path, metadata_dir: Path, data_root: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
     df = df.copy()
 
     cols_to_drop = [c for c in DROP_COLS if c in df.columns]
@@ -212,9 +263,10 @@ def build_features(df: pd.DataFrame, sentiment_dir: Path, metadata_dir: Path, da
     if ref_cols_to_drop:
         df = df.drop(columns=ref_cols_to_drop)
 
-    df = pd.concat([df, color_mh, breed_mh, sentiment_df, metadata_df], axis=1)
+    # NOTE: breed_mh is returned separately for PCA processing in run()
+    df = pd.concat([df, color_mh, sentiment_df, metadata_df], axis=1)
 
-    return df
+    return df, breed_mh
 
 
 def run(force: bool = False) -> None:
@@ -240,7 +292,7 @@ def run(force: bool = False) -> None:
     y_train = train_df["AdoptionSpeed"].copy()
 
     print("Building train features (sentiment + metadata)...")
-    train_features = build_features(train_df, sentiment_dir_train, metadata_dir_train, data_root)
+    train_features, train_breed_mh = build_features(train_df, sentiment_dir_train, metadata_dir_train, data_root)
     train_features["AdoptionSpeed"] = y_train.values
 
     print("Loading test CSV...")
@@ -248,9 +300,26 @@ def run(force: bool = False) -> None:
     test_pet_ids = test_df["PetID"].copy()
 
     print("Building test features (sentiment + metadata)...")
-    test_features = build_features(test_df, sentiment_dir_test, metadata_dir_test, data_root)
+    test_features, test_breed_mh = build_features(test_df, sentiment_dir_test, metadata_dir_test, data_root)
     test_features["PetID"] = test_pet_ids.values
 
+    # Apply PCA to breed multi-hot columns (fit on train, transform both)
+    print("Applying PCA to breed features...")
+    train_breed_pca, test_breed_pca, breed_pca = apply_breed_pca(
+        train_breed_mh, test_breed_mh, n_components=BREED_PCA_COMPONENTS
+    )
+
+    # Save the fitted PCA object for reproducibility
+    pca_path = CACHE_DIR / "breed_pca.pkl"
+    with open(pca_path, "wb") as f:
+        pickle.dump(breed_pca, f)
+    print(f"  Saved PCA transformer: {pca_path}")
+
+    # Concatenate PCA breed features with the rest
+    train_features = pd.concat([train_features, train_breed_pca], axis=1)
+    test_features = pd.concat([test_features, test_breed_pca], axis=1)
+
+    # Align columns between train and test
     train_cols = set(train_features.columns) - {"AdoptionSpeed"}
     test_cols = set(test_features.columns) - {"PetID"}
     missing_cols = sorted(train_cols - test_cols)

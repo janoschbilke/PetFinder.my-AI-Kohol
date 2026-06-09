@@ -9,3 +9,10 @@ Accept rules here
 ~/.cache/kagglehub/competitions/petfinder-adoption-prediction.archive
 
 export KAGGLE_API_TOKEN=xxxxxxxxxxxxxx
+
+## Installation
+
+LightGBM needs `libomp`
+```
+brew install libomp
+```

@@ -1,12 +1,16 @@
+import os
+
+# For optuna and macOs
+os.environ.setdefault("LOKY_MAX_CPU_COUNT", "1")
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+
 import argparse
 
 from src import (
     data,
     data_analysis,
-    evaluate,
     image_embeddings,
     lgbm,
-    model,
     preprocessing,
 )
 
@@ -19,38 +23,41 @@ def main(
     mode: str = "all_multiclass",
     tune: bool = False,
     n_trials: int = N_TUNING_TRIALS,
+    backbone: str = "alexnet",
+    embedding_pca: int = preprocessing.DEFAULT_EMBEDDING_PCA_COMPONENTS
 ) -> None:
+
     print("Step 0: Download Data")
     data.run(force=force)
 
     print("\nStep 1: Data Analysis")
     data_analysis.run(force=force)
 
-    print("\nStep 2: Preprocessing")
-    preprocessing.run(force=force, mode=mode)
+    if embedding_pca > 0:
+        print(f"\nStep 2: Image Embeddings (backbone={backbone})")
+        image_embeddings.run(force=force, backbone=backbone)
+    else:
+        print("\nStep 2: Skipping image embeddings (embedding_pca=0)")
 
-    # print("\nStep 3: Image Embeddings")
-    # image_embeddings.run(force=force)
+    print(f"\nStep 3: Preprocessing (mode={mode}, backbone={backbone}, embedding_pca={embedding_pca})")
+    preprocessing.run(force=force, mode=mode, backbone=backbone, embedding_pca=embedding_pca)
 
-    # print("\nStep 4: Model Training & Prediction (tabular + CNN embeddings)")
-    # model.run(force=force)
+    # Build the feature_suffix so lgbm loads the right parquet
+    mode_suffix = preprocessing.MODES[mode]["cache_suffix"]
+    if embedding_pca > 0:
+        feat_suffix = f"{mode_suffix}_{backbone}_pca{embedding_pca}"
+    else:
+        feat_suffix = f"{mode_suffix}_noembed"
 
-    print("\nStep 4b: LightGBM Training (tabular features only)")
-    lgbm.run(force=force, tune=tune, mode=mode, n_trials=n_trials)
-
-    # print("\nStep 5: Evaluation")
-    # evaluate.run(force=force)
-
-    print("\nPipeline complete.")
-
-    print("\nStep 3: Image Embeddings")
-    image_embeddings.run(force=force)
-
-    print("\nStep 4: Model Training & Prediction")
-    model.run(force=force)
-
-    print("\nStep 5: Evaluation")
-    evaluate.run(force=force)
+    print("\nStep 4: LightGBM Training")
+    lgbm.run(
+        force=force,
+        tune=tune,
+        mode=mode,
+        n_trials=n_trials,
+        feature_suffix=feat_suffix,
+        experiment_id=feat_suffix,
+    )
 
     print("\nPipeline complete.")
 
@@ -60,9 +67,21 @@ if __name__ == "__main__":
     parser.add_argument("--force", action="store_true", help="Ignore cache and recompute all steps")
     parser.add_argument(
         "--mode",
-        choices=list(MODES.keys()),
+        choices=list(preprocessing.MODES.keys()),
         default="all_multiclass",
-        help="Data subset/task mode for preprocessing and LightGBM (default: all_multiclass)",
+        help="Data subset/task mode (default: all_multiclass)",
+    )
+    parser.add_argument(
+        "--backbone",
+        choices=["alexnet", "resnet50", "efficientnet_b0"],
+        default="alexnet",
+        help="CNN backbone for image embeddings (default: alexnet)",
+    )
+    parser.add_argument(
+        "--embedding-pca",
+        type=int,
+        default=preprocessing.DEFAULT_EMBEDDING_PCA_COMPONENTS,
+        help="PCA components for CNN embeddings, 0=skip (default: 64)",
     )
     parser.add_argument(
         "--tune",
@@ -72,8 +91,25 @@ if __name__ == "__main__":
     parser.add_argument(
         "--n-trials",
         type=int,
-        default=N_TUNING_TRIALS,
-        help=f"Number of Optuna trials for LightGBM tuning (default: {N_TUNING_TRIALS})",
+        default=None,
+        help=(
+            f"Number of Optuna trials. "
+            f"Default: 15 when --experiments, {N_TUNING_TRIALS} otherwise."
+        ),
     )
     args = parser.parse_args()
-    main(force=args.force, mode=args.mode, tune=args.tune, n_trials=args.n_trials)
+
+    # Resolve n_trials default based on mode
+    if args.n_trials is not None:
+        n_trials = args.n_trials
+    else:
+        n_trials = N_TUNING_TRIALS  # 50
+
+    main(
+        force=args.force,
+        mode=args.mode,
+        tune=args.tune,
+        n_trials=n_trials,
+        backbone=args.backbone,
+        embedding_pca=args.embedding_pca
+    )

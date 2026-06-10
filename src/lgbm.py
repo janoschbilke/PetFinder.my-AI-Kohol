@@ -35,6 +35,17 @@ MODE_CONFIGS = {
         "labels": ["Same day", "1-7 days", "8-30 days", "31-90 days", ">100 days"],
         "objective": "multiclass",
         "metric": "multi_logloss",
+        # original AdoptionSpeed values (for Kaggle submission reverse-mapping)
+        "original_classes": [0, 1, 2, 3, 4],
+    },
+    "all_4class": {
+        "cache_suffix": "_4class",
+        "num_classes": 4,
+        "labels": ["1-7 days", "8-30 days", "31-90 days", ">100 days"],
+        "objective": "multiclass",
+        "metric": "multi_logloss",
+        # model predicts 0-3, but Kaggle expects 1-4
+        "original_classes": [1, 2, 3, 4],
     },
     "dogs_extreme": {
         "cache_suffix": "_dogs_extreme",
@@ -42,6 +53,7 @@ MODE_CONFIGS = {
         "labels": ["Same day", ">100 days"],
         "objective": "binary",
         "metric": "binary_logloss",
+        "original_classes": [0, 4],
     },
     "dogs_month_vs_100": {
         "cache_suffix": "_dogs_month_vs_100",
@@ -49,6 +61,7 @@ MODE_CONFIGS = {
         "labels": ["8-30 days", ">100 days"],
         "objective": "binary",
         "metric": "binary_logloss",
+        "original_classes": [2, 4],
     },
     "dogs_adjacent": {
         "cache_suffix": "_dogs_adjacent",
@@ -56,6 +69,7 @@ MODE_CONFIGS = {
         "labels": ["8-30 days", "31-90 days"],
         "objective": "binary",
         "metric": "binary_logloss",
+        "original_classes": [2, 3],
     },
     "cats_month_vs_100": {
         "cache_suffix": "_cats_month_vs_100",
@@ -63,6 +77,7 @@ MODE_CONFIGS = {
         "labels": ["8-30 days", ">100 days"],
         "objective": "binary",
         "metric": "binary_logloss",
+        "original_classes": [2, 4],
     },
 }
 
@@ -111,10 +126,15 @@ def get_default_params(mode: str) -> dict:
     return LGBM_PARAMS_MULTICLASS.copy()
 
 
-def load_data(mode: str = "full") -> tuple[np.ndarray, np.ndarray, np.ndarray, list[str], list[str]]:
-    """Load the preprocessed tabular features."""
-    suffix = MODE_CONFIGS[mode]["cache_suffix"]
-    print(f"  Loading tabular features from preprocessing cache ({mode} mode)...")
+def load_data(mode: str = "full", feature_suffix: str | None = None) -> tuple[np.ndarray, np.ndarray, np.ndarray, list[str], list[str]]:
+    """
+    Args:
+        mode: Mode key (used for default suffix lookup)
+        feature_suffix: Override the parquet file suffix (e.g. "_4class_alexnet_pca64").
+                        If None, uses the mode's default cache_suffix.
+    """
+    suffix = feature_suffix if feature_suffix is not None else MODE_CONFIGS[mode]["cache_suffix"]
+    print(f"  Loading tabular features from preprocessing cache ({mode} / {suffix})...")
     train_feat = pd.read_parquet(CACHE_DIR / f"train_features{suffix}.parquet")
     test_feat = pd.read_parquet(CACHE_DIR / f"test_features{suffix}.parquet")
 
@@ -286,7 +306,7 @@ def tune_hyperparameters(
             "boosting_type": "gbdt",
             "verbosity": -1,
             "seed": RANDOM_STATE,
-            "n_jobs": -1,
+            "n_jobs": 1,
             # --- Tunable parameters ---
             "learning_rate": trial.suggest_float("learning_rate", 0.01, 0.15, log=True),
             "num_leaves": trial.suggest_int("num_leaves", 16, 128),
@@ -438,41 +458,59 @@ def train_and_evaluate(
     return best_model, oof_preds, oof_probs if n_classes == 2 else None
 
 
-def run(force: bool = False, tune: bool = False, mode: str = "all_multiclass",
-        n_trials: int = N_TUNING_TRIALS) -> None:
+def run(
+    force: bool = False,
+    tune: bool = False,
+    mode: str = "all_multiclass",
+    n_trials: int = N_TUNING_TRIALS,
+    feature_suffix: str | None = None,
+    experiment_id: str | None = None,
+) -> dict:
     """Run LightGBM training pipeline.
 
     Args:
         force: Retrain even if cache exists
         tune: Run Optuna hyperparameter tuning
-        mode: One of the keys in MODE_CONFIGS (e.g. "all_multiclass", "dogs_extreme", etc.)
+        mode: One of the keys in MODE_CONFIGS (e.g. "all_multiclass", "all_4class", etc.)
         n_trials: Number of Optuna trials
+        feature_suffix: Override parquet suffix for loading features (e.g. "_4class_alexnet_pca64")
+        experiment_id: Unique ID for saving model/metrics (defaults to mode suffix)
+
+    Returns:
+        dict with metrics: qwk, accuracy, f1_macro, f1_weighted
     """
     if mode not in MODE_CONFIGS:
         raise ValueError(f"Unknown mode '{mode}'. Choose from: {list(MODE_CONFIGS.keys())}")
 
     config = MODE_CONFIGS[mode]
-    suffix = config["cache_suffix"]
-    lgbm_model_path = CACHE_DIR / f"lgbm_model{suffix}.pkl"
+    # Use experiment_id for output files so multiple configs don't overwrite each other
+    out_suffix = experiment_id if experiment_id is not None else config["cache_suffix"]
+    lgbm_model_path = CACHE_DIR / f"lgbm_model{out_suffix}.pkl"
+    metrics_path = CACHE_DIR / f"lgbm_metrics{out_suffix}.json"
 
-    if not force and not tune and lgbm_model_path.exists():
-        print(f"LightGBM model already exists ({mode} mode). Use --force to retrain.")
-        return
+    if not force and not tune and lgbm_model_path.exists() and metrics_path.exists():
+        print(f"LightGBM model already exists ({out_suffix}). Use --force to retrain.")
+        with open(metrics_path) as f:
+            return json.load(f)
 
     print(f"\n{'='*60}")
-    print(f"  LightGBM Training — Mode: {mode}")
+    print(f"  LightGBM Training — Mode: {mode}  |  ID: {out_suffix}")
     print(f"  {config['labels']}")
     print(f"{'='*60}\n")
 
     print("Loading cached tabular features...")
-    X_train, y_train, X_test, test_pet_ids, col_names = load_data(mode=mode)
+    X_train, y_train, X_test, test_pet_ids, col_names = load_data(mode=mode, feature_suffix=feature_suffix)
 
     # Determine which parameters to use
     params = get_default_params(mode)
-    params_path = CACHE_DIR / f"lgbm_best_params_{mode}.json"
+    # Per-experiment tuned params (keyed by out_suffix)
+    params_path = CACHE_DIR / f"lgbm_best_params{out_suffix}.json"
 
     if tune:
         params = tune_hyperparameters(X_train, y_train, col_names, mode=mode, n_trials=n_trials)
+        # Save under experiment-specific path
+        with open(params_path, "w") as f:
+            json.dump(params, f, indent=2, default=str)
     elif params_path.exists():
         print(f"\n  Loading tuned params from {params_path}")
         with open(params_path) as f:
@@ -488,16 +526,57 @@ def run(force: bool = False, tune: bool = False, mode: str = "all_multiclass",
 
     print_oof_metrics(oof_preds, y_train, mode=mode, oof_probs=oof_probs)
 
+    # Compute and save metrics dict
+    n_classes = config["num_classes"]
+    metrics: dict = {
+        "mode": mode,
+        "out_suffix": out_suffix,
+        "accuracy": float(accuracy_score(y_train, oof_preds)),
+        "f1_macro": float(f1_score(y_train, oof_preds, average="macro")),
+        "f1_weighted": float(f1_score(y_train, oof_preds, average="weighted")),
+    }
+    if n_classes > 2:
+        metrics["qwk"] = float(quadratic_weighted_kappa(y_train, oof_preds))
+    if n_classes == 2 and oof_probs is not None:
+        metrics["auc"] = float(roc_auc_score(y_train, oof_probs))
+
     print("\nSaving model and OOF predictions...")
     CACHE_DIR.mkdir(exist_ok=True)
     with open(lgbm_model_path, "wb") as f:
         pickle.dump(best_model, f)
-    np.save(CACHE_DIR / f"lgbm_oof_predictions{suffix}.npy", oof_preds)
-    np.save(CACHE_DIR / f"lgbm_oof_labels{suffix}.npy", y_train)
-    np.save(CACHE_DIR / f"lgbm_col_names{suffix}.npy", np.array(col_names, dtype=object))
+    np.save(CACHE_DIR / f"lgbm_oof_predictions{out_suffix}.npy", oof_preds)
+    np.save(CACHE_DIR / f"lgbm_oof_labels{out_suffix}.npy", y_train)
+    np.save(CACHE_DIR / f"lgbm_col_names{out_suffix}.npy", np.array(col_names, dtype=object))
     if oof_probs is not None:
-        np.save(CACHE_DIR / f"lgbm_oof_probs{suffix}.npy", oof_probs)
+        np.save(CACHE_DIR / f"lgbm_oof_probs{out_suffix}.npy", oof_probs)
+    with open(metrics_path, "w") as f:
+        json.dump(metrics, f, indent=2)
     print(f"  Saved: {lgbm_model_path}")
+    print(f"  Saved: {metrics_path}")
+
+    # --- Generate Kaggle submission CSV ---
+    print("\nGenerating submission CSV...")
+    test_raw = best_model.predict(X_test, num_iteration=best_model.best_iteration)
+    if n_classes == 2:
+        test_preds_internal = (test_raw > 0.5).astype(int)
+    else:
+        test_preds_internal = np.argmax(test_raw, axis=1)
+
+    # Reverse-map internal labels (0, 1, ...) back to original AdoptionSpeed values
+    original_classes = config["original_classes"]
+    test_preds_kaggle = np.array([original_classes[p] for p in test_preds_internal])
+
+    submissions_dir = Path("submissions")
+    submissions_dir.mkdir(exist_ok=True)
+    submission_path = submissions_dir / f"submission{out_suffix}.csv"
+    submission_df = pd.DataFrame({
+        "PetID": test_pet_ids,
+        "AdoptionSpeed": test_preds_kaggle,
+    })
+    submission_df.to_csv(submission_path, index=False)
+    print(f"  Saved: {submission_path}  ({len(submission_df)} rows)")
+
+    return metrics
 
 
 if __name__ == "__main__":

@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 from src.data import get_data_root
 
-BACKBONE = "alexnet"
+DEFAULT_BACKBONE = "alexnet"
 CACHE_DIR = Path("cache")
 
 IMAGENET_MEAN = [0.485, 0.456, 0.406]
@@ -68,25 +68,32 @@ def embed_pet(pet_id: str, images_dir: Path, model: torch.nn.Module, device: tor
     return np.mean(image_vecs, axis=0)
 
 
-def compute_embeddings(pet_ids: list[str], images_dir: Path, model: torch.nn.Module, device: torch.device, embedding_size: int) -> np.ndarray:
+def compute_embeddings(pet_ids: list[str], images_dir: Path, model: torch.nn.Module, device: torch.device, embedding_size: int, backbone: str = DEFAULT_BACKBONE) -> np.ndarray:
     embeddings = np.zeros((len(pet_ids), embedding_size), dtype=np.float32)
-    for i, pet_id in enumerate(tqdm(pet_ids, desc=f"Embedding ({BACKBONE})")):
+    for i, pet_id in enumerate(tqdm(pet_ids, desc=f"Embedding ({backbone})")):
         vec = embed_pet(pet_id, images_dir, model, device)
         if vec is not None:
             embeddings[i] = vec
     return embeddings
 
 
-def run(force: bool = False) -> None:
+def run(force: bool = False, backbone: str = DEFAULT_BACKBONE) -> None:
+    """Compute and cache CNN embeddings for all pets.
+
+    Args:
+        force: Recompute even if cache exists
+        backbone: CNN backbone to use ("alexnet", "resnet50", "efficientnet_b0")
+    """
     CACHE_DIR.mkdir(exist_ok=True)
 
-    train_emb_out = CACHE_DIR / "train_embeddings.npy"
-    train_ids_out = CACHE_DIR / "train_pet_ids.npy"
-    test_emb_out = CACHE_DIR / "test_embeddings.npy"
-    test_ids_out = CACHE_DIR / "test_pet_ids.npy"
+    # Backbone-specific cache files so multiple backbones can coexist
+    train_emb_out = CACHE_DIR / f"train_embeddings_{backbone}.npy"
+    train_ids_out = CACHE_DIR / f"train_pet_ids_{backbone}.npy"
+    test_emb_out = CACHE_DIR / f"test_embeddings_{backbone}.npy"
+    test_ids_out = CACHE_DIR / f"test_pet_ids_{backbone}.npy"
 
     if not force and all(p.exists() for p in [train_emb_out, train_ids_out, test_emb_out, test_ids_out]):
-        print("Embedding cache found, skipping. Use --force to recompute.")
+        print(f"Embedding cache found ({backbone}), skipping. Use --force to recompute.")
         return
 
     data_root = get_data_root()
@@ -96,9 +103,9 @@ def run(force: bool = False) -> None:
     test_csv = data_root / "test" / "test.csv"
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"Device: {device}  Backbone: {BACKBONE}")
+    print(f"Device: {device}  Backbone: {backbone}")
 
-    model, embedding_size = build_backbone(BACKBONE)
+    model, embedding_size = build_backbone(backbone)
     model = model.to(device)
 
     import pandas as pd
@@ -106,10 +113,10 @@ def run(force: bool = False) -> None:
     test_pet_ids = pd.read_csv(test_csv)["PetID"].tolist()
 
     print(f"Computing train embeddings ({len(train_pet_ids)} pets)...")
-    train_embeddings = compute_embeddings(train_pet_ids, train_images_dir, model, device, embedding_size)
+    train_embeddings = compute_embeddings(train_pet_ids, train_images_dir, model, device, embedding_size, backbone)
 
     print(f"Computing test embeddings ({len(test_pet_ids)} pets)...")
-    test_embeddings = compute_embeddings(test_pet_ids, test_images_dir, model, device, embedding_size)
+    test_embeddings = compute_embeddings(test_pet_ids, test_images_dir, model, device, embedding_size, backbone)
 
     np.save(train_emb_out, train_embeddings)
     np.save(train_ids_out, np.array(train_pet_ids))
@@ -123,5 +130,11 @@ def run(force: bool = False) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--force", action="store_true")
+    parser.add_argument(
+        "--backbone",
+        choices=["alexnet", "resnet50", "efficientnet_b0"],
+        default=DEFAULT_BACKBONE,
+        help=f"CNN backbone to use (default: {DEFAULT_BACKBONE})",
+    )
     args = parser.parse_args()
-    run(force=args.force)
+    run(force=args.force, backbone=args.backbone)

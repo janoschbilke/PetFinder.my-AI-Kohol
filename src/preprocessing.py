@@ -22,6 +22,7 @@ BREED_COLS = ["Breed1", "Breed2"]
 DROP_COLS = ["Name", "Description", "AdoptionSpeed", "RescuerID"]
 
 BREED_PCA_COMPONENTS = 15
+DEFAULT_EMBEDDING_PCA_COMPONENTS = 64
 
 OHE_DROP_CATEGORIES: dict[str, int] = {
     "Vaccinated":   3,
@@ -59,6 +60,12 @@ MODES = {
         "type_filter": None,
         "classes": [0, 1, 2, 3, 4],
         "cache_suffix": "",
+    },
+    "all_4class": {
+        "description": "All pets, classes 1–4 only (drop same-day class 0, relabeled 0–3)",
+        "type_filter": None,
+        "classes": [1, 2, 3, 4],
+        "cache_suffix": "_4class",
     },
     "dogs_extreme": {
         "description": "Dogs only — same day (0) vs >100 days (4)",
@@ -193,6 +200,92 @@ def multi_hot_encode(
         result_dict[col_name] = mask
 
     return pd.DataFrame(result_dict, index=df.index)
+
+
+def load_and_apply_embedding_pca(
+    train_pet_ids: list[str],
+    test_pet_ids: list[str],
+    train_index,
+    test_index,
+    n_components: int = DEFAULT_EMBEDDING_PCA_COMPONENTS,
+    suffix: str = "",
+    backbone: str = "alexnet",
+) -> tuple[pd.DataFrame | None, pd.DataFrame | None]:
+    """Load pre-computed CNN embeddings and apply PCA to reduce dimensionality.
+
+    Embeddings are aligned to the current (possibly mode-filtered) pet ID lists.
+    PCA is fitted on training data only to avoid data leakage.
+
+    Returns (None, None) if the embedding cache files don't exist yet.
+    """
+    train_emb_path = CACHE_DIR / f"train_embeddings_{backbone}.npy"
+    train_ids_path = CACHE_DIR / f"train_pet_ids_{backbone}.npy"
+    test_emb_path = CACHE_DIR / f"test_embeddings_{backbone}.npy"
+    test_ids_path = CACHE_DIR / f"test_pet_ids_{backbone}.npy"
+
+    if not all(p.exists() for p in [train_emb_path, train_ids_path, test_emb_path, test_ids_path]):
+        print(f"  Embedding cache not found for backbone '{backbone}' — skipping CNN features.")
+        print(f"  Run 'python -m src.image_embeddings --backbone {backbone}' first.")
+        return None, None
+
+    # Load full embedding arrays
+    all_train_emb = np.load(train_emb_path)   # (N_full, embedding_size)
+    all_train_ids = np.load(train_ids_path, allow_pickle=True).tolist()
+    all_test_emb = np.load(test_emb_path)
+    all_test_ids = np.load(test_ids_path, allow_pickle=True).tolist()
+
+    embedding_size = all_train_emb.shape[1]
+
+    # Build PetID → row-index lookups
+    train_id_to_idx = {pid: i for i, pid in enumerate(all_train_ids)}
+    test_id_to_idx = {pid: i for i, pid in enumerate(all_test_ids)}
+
+    # Align to the current (possibly filtered) pet ID lists; missing → zero vector
+    train_emb = np.zeros((len(train_pet_ids), embedding_size), dtype=np.float32)
+    for i, pid in enumerate(train_pet_ids):
+        if pid in train_id_to_idx:
+            train_emb[i] = all_train_emb[train_id_to_idx[pid]]
+
+    test_emb = np.zeros((len(test_pet_ids), embedding_size), dtype=np.float32)
+    for i, pid in enumerate(test_pet_ids):
+        if pid in test_id_to_idx:
+            test_emb[i] = all_test_emb[test_id_to_idx[pid]]
+
+    # Fit PCA on training data only, then transform both splits
+    actual_components = min(n_components, embedding_size, len(train_pet_ids))
+    pca = PCA(n_components=actual_components, random_state=42)
+    train_pca = pca.fit_transform(train_emb)
+    test_pca = pca.transform(test_emb)
+
+    explained_var = pca.explained_variance_ratio_.sum()
+    print(f"  Embedding PCA ({backbone}): {embedding_size} dims → {actual_components} components "
+          f"(explained variance: {explained_var:.1%})")
+
+    # Persist the fitted PCA so it can be reused for inference
+    pca_path = CACHE_DIR / f"embedding_pca{suffix}.pkl"
+    with open(pca_path, "wb") as f:
+        pickle.dump(pca, f)
+    print(f"  Saved embedding PCA transformer: {pca_path}")
+
+    col_names = [f"embed_pca_{i}" for i in range(actual_components)]
+    train_pca_df = pd.DataFrame(train_pca, index=train_index, columns=col_names)
+    test_pca_df = pd.DataFrame(test_pca, index=test_index, columns=col_names)
+
+    # Save explained variance metadata so experiment_runner can include it in reports
+    variance_meta = {
+        "backbone": backbone,
+        "n_components_requested": n_components,
+        "n_components_actual": actual_components,
+        "embedding_size": embedding_size,
+        "explained_variance_ratio": float(explained_var),
+        "per_component_variance": pca.explained_variance_ratio_.tolist(),
+    }
+    variance_path = CACHE_DIR / f"embedding_pca_variance{suffix}.json"
+    import json as _json
+    with open(variance_path, "w") as f:
+        _json.dump(variance_meta, f, indent=2)
+
+    return train_pca_df, test_pca_df
 
 
 def apply_breed_pca(
@@ -335,18 +428,33 @@ def build_features(
     return df, breed_mh
 
 
-def run(force: bool = False, mode: str = "all_multiclass") -> None:
+def run(
+    force: bool = False,
+    mode: str = "all_multiclass",
+    backbone: str = "alexnet",
+    embedding_pca: int = DEFAULT_EMBEDDING_PCA_COMPONENTS,
+) -> None:
     """Run preprocessing pipeline.
 
     Args:
         force: If True, ignore cache and recompute
-        mode: One of the keys in MODES dict (e.g. "all_multiclass", "dogs_extreme", etc.)
+        mode: One of the keys in MODES dict (e.g. "all_multiclass", "all_4class", etc.)
+        backbone: CNN backbone whose embeddings to load ("alexnet", "resnet50", "efficientnet_b0")
+        embedding_pca: Number of PCA components for CNN embeddings (0 = skip embeddings)
     """
     if mode not in MODES:
         raise ValueError(f"Unknown mode '{mode}'. Choose from: {list(MODES.keys())}")
 
     mode_config = MODES[mode]
-    suffix = mode_config["cache_suffix"]
+    mode_suffix = mode_config["cache_suffix"]
+
+    # Include backbone+pca in cache suffix when embeddings are used, so each
+    # backbone/pca combination gets its own parquet file.
+    if embedding_pca > 0:
+        embed_suffix = f"_{backbone}_pca{embedding_pca}"
+    else:
+        embed_suffix = "_noembed"
+    suffix = mode_suffix + embed_suffix
 
     CACHE_DIR.mkdir(exist_ok=True)
 
@@ -354,11 +462,11 @@ def run(force: bool = False, mode: str = "all_multiclass") -> None:
     test_out = CACHE_DIR / f"test_features{suffix}.parquet"
 
     if not force and train_out.exists() and test_out.exists():
-        print(f"Preprocessing cache found ({mode} mode), skipping. Use --force to recompute.")
+        print(f"Preprocessing cache found ({mode} / {suffix}), skipping. Use --force to recompute.")
         return
 
     print(f"\n{'='*60}")
-    print(f"  Preprocessing Mode: {mode}")
+    print(f"  Preprocessing Mode: {mode}  |  backbone: {backbone}  |  embed_pca: {embedding_pca}")
     print(f"  {mode_config['description']}")
     print(f"{'='*60}\n")
 
@@ -400,6 +508,9 @@ def run(force: bool = False, mode: str = "all_multiclass") -> None:
     # Determine if we should exclude the Type column
     exclude_type = type_filter is not None
 
+    # Capture PetIDs before build_features drops them (needed for embedding alignment)
+    train_pet_ids_list = train_df["PetID"].tolist()
+
     print("\nBuilding train features (sentiment + metadata)...")
     train_features, train_breed_mh = build_features(
         train_df, sentiment_dir_train, metadata_dir_train, data_root,
@@ -418,6 +529,7 @@ def run(force: bool = False, mode: str = "all_multiclass") -> None:
         print(f"  Filtered test to Type=={type_filter}: {len(test_df)} samples")
 
     test_pet_ids = test_df["PetID"].copy()
+    test_pet_ids_list = test_df["PetID"].tolist()
 
     print("Building test features (sentiment + metadata)...")
     test_features, test_breed_mh = build_features(
@@ -433,8 +545,8 @@ def run(force: bool = False, mode: str = "all_multiclass") -> None:
         train_breed_mh, test_breed_mh, n_components=BREED_PCA_COMPONENTS
     )
 
-    # Save the fitted PCA object for reproducibility
-    pca_path = CACHE_DIR / f"breed_pca{suffix}.pkl"
+    # Save the fitted breed PCA object (keyed by mode only, not backbone)
+    pca_path = CACHE_DIR / f"breed_pca{mode_suffix}.pkl"
     with open(pca_path, "wb") as f:
         pickle.dump(breed_pca, f)
     print(f"  Saved PCA transformer: {pca_path}")
@@ -442,6 +554,24 @@ def run(force: bool = False, mode: str = "all_multiclass") -> None:
     # Concatenate PCA breed features with the rest
     train_features = pd.concat([train_features, train_breed_pca], axis=1)
     test_features = pd.concat([test_features, test_breed_pca], axis=1)
+
+    # Load CNN embeddings and apply PCA, skipped when embedding_pca == 0
+    if embedding_pca > 0:
+        print("\nLoading CNN embeddings and applying PCA...")
+        train_embed_pca, test_embed_pca = load_and_apply_embedding_pca(
+            train_pet_ids_list,
+            test_pet_ids_list,
+            train_index=train_features.index,
+            test_index=test_features.index,
+            n_components=embedding_pca,
+            suffix=suffix,
+            backbone=backbone,
+        )
+        if train_embed_pca is not None:
+            train_features = pd.concat([train_features, train_embed_pca], axis=1)
+            test_features = pd.concat([test_features, test_embed_pca], axis=1)
+    else:
+        print("\nSkipping CNN embeddings (embedding_pca=0).")
 
     # Align columns between train and test
     train_cols = set(train_features.columns) - {"AdoptionSpeed"}
@@ -474,7 +604,23 @@ if __name__ == "__main__":
         description="Preprocess PetFinder data for model training."
     )
     parser.add_argument("--force", action="store_true", help="Ignore cache and recompute")
-    parser.add_argument("--mode", choices=list(MODES.keys()), default="all_multiclass",
-                        help="Data subset/task mode (default: all_multiclass)")
+    parser.add_argument(
+        "--mode",
+        choices=list(MODES.keys()),
+        default="all_multiclass",
+        help="Data subset/task mode (default: all_multiclass)",
+    )
+    parser.add_argument(
+        "--backbone",
+        choices=["alexnet", "resnet50", "efficientnet_b0"],
+        default="alexnet",
+        help="CNN backbone for embeddings (default: alexnet)",
+    )
+    parser.add_argument(
+        "--embedding-pca",
+        type=int,
+        default=DEFAULT_EMBEDDING_PCA_COMPONENTS,
+        help=f"PCA components for CNN embeddings, 0=skip (default: {DEFAULT_EMBEDDING_PCA_COMPONENTS})",
+    )
     args = parser.parse_args()
-    run(force=args.force, mode=args.mode)
+    run(force=args.force, mode=args.mode, backbone=args.backbone, embedding_pca=args.embedding_pca)

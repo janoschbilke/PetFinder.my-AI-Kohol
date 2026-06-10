@@ -1,14 +1,13 @@
-==============================================================================
-Breed PCA - Component Interpretation Report
-==============================================================================
+Breed PCA Component Interpretation Report
+====================
 Components:       15
 Input breeds:     307
 Training samples: 14993
 Total explained variance: 81.7%
 
-------------------------------------------------------------------------------
+--------------------
 PC1  (explained variance: 38.3%)  suggested label: -Type(-0.87)
-------------------------------------------------------------------------------
+--------------------
   Top +10 breed loadings (positive end):
     +0.787  Mixed Breed (Dog)
     +0.018  Labrador Retriever (Dog)
@@ -56,9 +55,9 @@ PC1  (explained variance: 38.3%)  suggested label: -Type(-0.87)
     score=-0.882  PetID=f0cd0a4cc  Type=Cat  Breeds=Domestic Medium Hair / Domestic Short Hair
     score=-0.882  PetID=75f582ad6  Type=Cat  Breeds=Domestic Medium Hair / Domestic Short Hair
 
-------------------------------------------------------------------------------
+--------------------
 PC2  (explained variance: 15.1%)  suggested label: -FurLength(-0.45)
-------------------------------------------------------------------------------
+--------------------
   Top +10 breed loadings (positive end):
     +0.655  Domestic Short Hair (Cat)
     +0.418  Mixed Breed (Dog)
@@ -106,9 +105,9 @@ PC2  (explained variance: 15.1%)  suggested label: -FurLength(-0.45)
     score=-0.983  PetID=31b3d9b10  Type=Cat  Breeds=Domestic Medium Hair / Domestic Long Hair
     score=-0.983  PetID=8ebe54ca6  Type=Cat  Breeds=Domestic Long Hair / Domestic Medium Hair
 
-------------------------------------------------------------------------------
+--------------------
 PC3  (explained variance: 6.6%)  suggested label: no strong signal
-------------------------------------------------------------------------------
+--------------------
   Top +10 breed loadings (positive end):
     +0.756  Domestic Medium Hair (Cat)
     +0.396  Domestic Short Hair (Cat)
@@ -156,9 +155,9 @@ PC3  (explained variance: 6.6%)  suggested label: no strong signal
     score=-0.696  PetID=6aeef2649  Type=Cat  Breeds=Tabby / Domestic Long Hair
     score=-0.696  PetID=89c8b19eb  Type=Cat  Breeds=Domestic Long Hair / Tabby
 
-------------------------------------------------------------------------------
+--------------------
 PC4  (explained variance: 3.3%)  suggested label: no strong signal
-------------------------------------------------------------------------------
+--------------------
   Top +10 breed loadings (positive end):
     +0.896  Tabby (Cat)
     +0.058  Domestic Medium Hair (Cat)
@@ -206,9 +205,9 @@ PC4  (explained variance: 3.3%)  suggested label: no strong signal
     score=-0.620  PetID=166345ac8  Type=Cat  Breeds=Persian / Domestic Long Hair
     score=-0.620  PetID=daed3d063  Type=Cat  Breeds=Persian / Domestic Long Hair
 
-------------------------------------------------------------------------------
+--------------------
 PC5  (explained variance: 2.8%)  suggested label: no strong signal
-------------------------------------------------------------------------------
+--------------------
   Top +10 breed loadings (positive end):
     +0.793  Domestic Long Hair (Cat)
     +0.337  Tabby (Cat)
@@ -256,9 +255,9 @@ PC5  (explained variance: 2.8%)  suggested label: no strong signal
     score=-0.467  PetID=03cdd9324  Type=Cat  Breeds=Siamese / Oriental Short Hair
     score=-0.467  PetID=6518a598b  Type=Cat  Breeds=Oriental Short Hair / Siamese
 
-------------------------------------------------------------------------------
+--------------------
 PC6  (explained variance: 2.5%)  suggested label: no strong signal
-------------------------------------------------------------------------------
+--------------------
   Top +10 breed loadings (positive end):
     +0.909  Siamese (Cat)
     +0.180  Domestic Long Hair (Cat)
@@ -306,9 +305,9 @@ PC6  (explained variance: 2.5%)  suggested label: no strong signal
     score=-0.380  PetID=8b17616d3  Type=Dog  Breeds=Poodle / Shih Tzu
     score=-0.380  PetID=37cec5261  Type=Dog  Breeds=Poodle / Shih Tzu
 
-------------------------------------------------------------------------------
+--------------------
 PC7  (explained variance: 2.1%)  suggested label: no strong signal
-------------------------------------------------------------------------------
+--------------------
   Top +10 breed loadings (positive end):
     +0.943  Labrador Retriever (Dog)
     +0.098  Domestic Long Hair (Cat)
@@ -356,9 +355,9 @@ PC7  (explained variance: 2.1%)  suggested label: no strong signal
     score=-0.390  PetID=1a76190c5  Type=Dog  Breeds=Shih Tzu / Terrier
     score=-0.390  PetID=9abb10f2f  Type=Dog  Breeds=Terrier / Shih Tzu
 
-------------------------------------------------------------------------------
+--------------------
 PC8  (explained variance: 2.0%)  suggested label: no strong signal
-------------------------------------------------------------------------------
+--------------------
   Top +10 breed loadings (positive end):
     +0.911  Persian (Cat)
     +0.067  Labrador Retriever (Dog)
@@ -406,9 +405,9 @@ PC8  (explained variance: 2.0%)  suggested label: no strong signal
     score=-0.454  PetID=b9405015b  Type=Cat  Breeds=Domestic Long Hair / Siamese
     score=-0.454  PetID=0162634c2  Type=Cat  Breeds=Siamese / Domestic Long Hair
 
-------------------------------------------------------------------------------
+--------------------
 PC9  (explained variance: 1.8%)  suggested label: no strong signal
-------------------------------------------------------------------------------
+--------------------
   Top +10 breed loadings (positive end):
     +0.941  Terrier (Dog)
     +0.199  Labrador Retriever (Dog)
@@ -456,9 +455,9 @@ PC9  (explained variance: 1.8%)  suggested label: no strong signal
     score=-0.203  PetID=ccd36a0f2  Type=Dog  Breeds=Golden Retriever / Spitz
     score=-0.203  PetID=4792b6d06  Type=Dog  Breeds=Golden Retriever / Spitz
 
-------------------------------------------------------------------------------
+--------------------
 PC10  (explained variance: 1.5%)  suggested label: no strong signal
-------------------------------------------------------------------------------
+--------------------
   Top +10 breed loadings (positive end):
     +0.879  Shih Tzu (Dog)
     +0.099  Labrador Retriever (Dog)
@@ -506,9 +505,9 @@ PC10  (explained variance: 1.5%)  suggested label: no strong signal
     score=-0.420  PetID=37bf6da18  Type=Dog  Breeds=Golden Retriever / Rottweiler
     score=-0.419  PetID=6c803e00e  Type=Dog  Breeds=Beagle / Golden Retriever
 
-------------------------------------------------------------------------------
+--------------------
 PC11  (explained variance: 1.4%)  suggested label: no strong signal
-------------------------------------------------------------------------------
+--------------------
   Top +10 breed loadings (positive end):
     +0.803  Poodle (Dog)
     +0.100  Labrador Retriever (Dog)
@@ -556,9 +555,9 @@ PC11  (explained variance: 1.4%)  suggested label: no strong signal
     score=-0.631  PetID=4792b6d06  Type=Dog  Breeds=Golden Retriever / Spitz
     score=-0.627  PetID=37bf6da18  Type=Dog  Breeds=Golden Retriever / Rottweiler
 
-------------------------------------------------------------------------------
+--------------------
 PC12  (explained variance: 1.3%)  suggested label: no strong signal
-------------------------------------------------------------------------------
+--------------------
   Top +10 breed loadings (positive end):
     +0.708  Golden Retriever (Dog)
     +0.415  Poodle (Dog)
@@ -606,9 +605,9 @@ PC12  (explained variance: 1.3%)  suggested label: no strong signal
     score=-0.428  PetID=68ac3848d  Type=Dog  Breeds=Rottweiler / German Shepherd Dog
     score=-0.428  PetID=f252006a7  Type=Dog  Breeds=German Shepherd Dog / Rottweiler
 
-------------------------------------------------------------------------------
+--------------------
 PC13  (explained variance: 1.1%)  suggested label: no strong signal
-------------------------------------------------------------------------------
+--------------------
   Top +10 breed loadings (positive end):
     +0.905  German Shepherd Dog (Dog)
     +0.136  Spitz (Dog)
@@ -656,9 +655,9 @@ PC13  (explained variance: 1.1%)  suggested label: no strong signal
     score=-0.397  PetID=0c5b71bf0  Type=Cat  Breeds=Calico / Tortoiseshell
     score=-0.397  PetID=49ba2ccff  Type=Cat  Breeds=Tortoiseshell / Calico
 
-------------------------------------------------------------------------------
+--------------------
 PC14  (explained variance: 1.0%)  suggested label: no strong signal
-------------------------------------------------------------------------------
+--------------------
   Top +10 breed loadings (positive end):
     +0.757  Calico (Cat)
     +0.314  German Shepherd Dog (Dog)
@@ -706,9 +705,9 @@ PC14  (explained variance: 1.0%)  suggested label: no strong signal
     score=-0.577  PetID=5fed61438  Type=Dog  Breeds=Miniature Pinscher / Spitz
     score=-0.577  PetID=9c8209bae  Type=Dog  Breeds=Miniature Pinscher / Spitz
 
-------------------------------------------------------------------------------
+--------------------
 PC15  (explained variance: 1.0%)  suggested label: no strong signal
-------------------------------------------------------------------------------
+--------------------
   Top +10 breed loadings (positive end):
     +0.823  Spitz (Dog)
     +0.424  Calico (Cat)

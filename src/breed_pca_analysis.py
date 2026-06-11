@@ -127,7 +127,8 @@ def _build_loading_meta(
     breed_col_names = breed_mh.columns.tolist()
     breed_id_per_col = [int(c.split("_")[1]) for c in breed_col_names]
     name_lookup = breed_labels.set_index("BreedID")[["BreedName", "Type"]]
-    loading_meta = name_lookup.loc[breed_id_per_col].reset_index(drop=True)
+    loading_meta = name_lookup.loc[breed_id_per_col].reset_index(drop=False)
+    loading_meta = loading_meta.rename(columns={"BreedID": "breed_id"})
     loading_meta["display"] = loading_meta.apply(_format_breed_name, axis=1)
     return loading_meta
 
@@ -329,6 +330,29 @@ def _plot_top_loadings(
     return path
 
 
+def _write_component_csvs(
+    pca: PCA, loading_meta: pd.DataFrame, output_dir: Path
+) -> Path:
+    csv_dir = output_dir / "components"
+    csv_dir.mkdir(parents=True, exist_ok=True)
+    type_str = loading_meta["Type"].map({1: "Dog", 2: "Cat"}).fillna("?")
+    for i in range(pca.n_components_):
+        loadings = pca.components_[i]
+        df = pd.DataFrame(
+            {
+                "breed_id": loading_meta["breed_id"].astype(int),
+                "breed_name": loading_meta["BreedName"],
+                "type": type_str,
+                "loading": loadings,
+            }
+        )
+        df = df.sort_values("loading", ascending=False).reset_index(drop=True)
+        df.insert(0, "rank", df.index + 1)
+        df["loading"] = df["loading"].round(6)
+        df.to_csv(csv_dir / f"pc{i + 1:02d}_loadings.csv", index=False)
+    return csv_dir
+
+
 def _plot_scree(pca: PCA, output_dir: Path) -> Path:
     n_components = pca.n_components_
     fig, ax = plt.subplots(figsize=(8, 5))
@@ -381,6 +405,9 @@ def run(
 
     scree_path = _plot_scree(pca, output_dir)
     print(f"Wrote scree plot:    {scree_path}")
+
+    csv_dir = _write_component_csvs(pca, loading_meta, output_dir)
+    print(f"Wrote component CSVs: {csv_dir}")
 
     print("\nDone.")
 

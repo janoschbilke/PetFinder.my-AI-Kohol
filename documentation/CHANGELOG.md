@@ -33,6 +33,20 @@
 - get more data understanding
 - promising result first: ~80% precision
 
+## 12.06.2026
+
+1. simpler approach & simplify dataset
+![Metrics Summary](results_metrics_summary.png)
+
+- tested with binary output classes and only dogs / cats for simplicity
+- same day vs. 100+ day yielded "best" result, but only due to high imbalance in classes
+- in general: results get worse, if classes are closer
+- no "perfect" model archieved
+
+2. pca analysis
+
+3. image embeddings
+
 ### Our straw plan
 
 - Overwrite/dismiss all 0 into 1 -> class 0 is so drastically underrepresented, it cannot be predicted and has precision of around 3% (catastrophically)

@@ -1,0 +1,775 @@
+Breed PCA Component Interpretation Report
+====================
+Components:       15
+Input breeds:     307
+Training samples: 14993
+Total explained variance: 81.7%
+
+--------------------
+PC1  (explained variance: 38.3%)  suggested label: -Type(-0.87)
+--------------------
+  Top +10 breed loadings (positive end):
+    +0.787  Mixed Breed (Dog)
+    +0.018  Labrador Retriever (Dog)
+    +0.013  Terrier (Dog)
+    +0.009  German Shepherd Dog (Dog)
+    +0.007  Spitz (Dog)
+    +0.005  Doberman Pinscher (Dog)
+    +0.005  Rottweiler (Dog)
+    +0.004  Belgian Shepherd Malinois (Dog)
+    +0.003  Hound (Dog)
+    +0.002  Jack Russell Terrier (Dog)
+  Top -10 breed loadings (negative end):
+    -0.606  Domestic Short Hair (Cat)
+    -0.100  Domestic Medium Hair (Cat)
+    -0.033  Tabby (Cat)
+    -0.026  Siamese (Cat)
+    -0.022  Domestic Long Hair (Cat)
+    -0.017  Persian (Cat)
+    -0.010  Calico (Cat)
+    -0.007  Bengal (Cat)
+    -0.007  Shih Tzu (Dog)
+    -0.006  American Shorthair (Cat)
+  Correlation with raw features:
+              Type: -0.868  *
+      MaturitySize: +0.204
+         FurLength: +0.051
+               Age: -0.019
+               Fee: -0.037
+          PhotoAmt: -0.031
+          Quantity: -0.005
+        Vaccinated: -0.057
+        Sterilized: +0.017
+            Health: -0.015
+     AdoptionSpeed: +0.124
+  Example pets at HIGH end of PC1:
+    score=+0.629  PetID=2d88536fc  Type=Dog  Breeds=Labrador Retriever / Mixed Breed
+    score=+0.629  PetID=611c6421b  Type=Dog  Breeds=Labrador Retriever / Mixed Breed
+    score=+0.629  PetID=67839e63d  Type=Dog  Breeds=Labrador Retriever / Mixed Breed
+    score=+0.629  PetID=8054aad26  Type=Dog  Breeds=Labrador Retriever / Mixed Breed
+    score=+0.629  PetID=48a2123f4  Type=Dog  Breeds=Labrador Retriever / Mixed Breed
+  Example pets at LOW end of PC1:
+    score=-0.882  PetID=71d36d5c4  Type=Cat  Breeds=Domestic Short Hair / Domestic Medium Hair
+    score=-0.882  PetID=a904d6da4  Type=Cat  Breeds=Domestic Short Hair / Domestic Medium Hair
+    score=-0.882  PetID=f120723d0  Type=Cat  Breeds=Domestic Medium Hair / Domestic Short Hair
+    score=-0.882  PetID=f0cd0a4cc  Type=Cat  Breeds=Domestic Medium Hair / Domestic Short Hair
+    score=-0.882  PetID=75f582ad6  Type=Cat  Breeds=Domestic Medium Hair / Domestic Short Hair
+
+--------------------
+PC2  (explained variance: 15.1%)  suggested label: -FurLength(-0.45)
+--------------------
+  Top +10 breed loadings (positive end):
+    +0.655  Domestic Short Hair (Cat)
+    +0.418  Mixed Breed (Dog)
+    +0.001  Hound (Dog)
+    +0.001  Belgian Shepherd Malinois (Dog)
+    +0.001  Yellow Labrador Retriever (Dog)
+    +0.000  Shepherd (Dog)
+    +0.000  Chartreux (Cat)
+    +0.000  Torbie (Cat)
+    +0.000  Toy Fox Terrier (Dog)
+    +0.000  Black Mouth Cur (Dog)
+  Top -10 breed loadings (negative end):
+    -0.615  Domestic Medium Hair (Cat)
+    -0.078  Domestic Long Hair (Cat)
+    -0.059  Tabby (Cat)
+    -0.053  Persian (Cat)
+    -0.045  Siamese (Cat)
+    -0.033  Shih Tzu (Dog)
+    -0.027  Poodle (Dog)
+    -0.017  Golden Retriever (Dog)
+    -0.015  Calico (Cat)
+    -0.015  Oriental Short Hair (Cat)
+  Correlation with raw features:
+              Type: -0.146
+      MaturitySize: -0.017
+         FurLength: -0.453  *
+               Age: -0.131
+               Fee: -0.132
+          PhotoAmt: +0.035
+          Quantity: +0.028
+        Vaccinated: -0.018
+        Sterilized: -0.027
+            Health: -0.019
+     AdoptionSpeed: +0.097
+  Example pets at HIGH end of PC2:
+    score=+0.366  PetID=147d6fab7  Type=Cat  Breeds=Domestic Short Hair / Chartreux
+    score=+0.366  PetID=b79df3351  Type=Cat  Breeds=Domestic Short Hair / Chartreux
+    score=+0.366  PetID=7d7fddaed  Type=Cat  Breeds=Domestic Short Hair / Chartreux
+    score=+0.366  PetID=a543418a3  Type=Cat  Breeds=Torbie / Domestic Short Hair
+    score=+0.366  PetID=5884b684d  Type=Cat  Breeds=Domestic Short Hair / Torbie
+  Example pets at LOW end of PC2:
+    score=-0.983  PetID=975cf510c  Type=Cat  Breeds=Domestic Medium Hair / Domestic Long Hair
+    score=-0.983  PetID=5afe2ebbc  Type=Cat  Breeds=Domestic Long Hair / Domestic Medium Hair
+    score=-0.983  PetID=92df22369  Type=Cat  Breeds=Domestic Long Hair / Domestic Medium Hair
+    score=-0.983  PetID=31b3d9b10  Type=Cat  Breeds=Domestic Medium Hair / Domestic Long Hair
+    score=-0.983  PetID=8ebe54ca6  Type=Cat  Breeds=Domestic Long Hair / Domestic Medium Hair
+
+--------------------
+PC3  (explained variance: 6.6%)  suggested label: no strong signal
+--------------------
+  Top +10 breed loadings (positive end):
+    +0.756  Domestic Medium Hair (Cat)
+    +0.396  Domestic Short Hair (Cat)
+    +0.381  Mixed Breed (Dog)
+    +0.001  Yellow Labrador Retriever (Dog)
+    +0.000  Munchkin (Cat)
+    +0.000  Hound (Dog)
+    +0.000  Black Mouth Cur (Dog)
+    +0.000  Toy Fox Terrier (Dog)
+    +0.000  Scottish Terrier Scottie (Dog)
+    +0.000  English Springer Spaniel (Dog)
+  Top -10 breed loadings (negative end):
+    -0.200  Tabby (Cat)
+    -0.170  Domestic Long Hair (Cat)
+    -0.108  Siamese (Cat)
+    -0.102  Shih Tzu (Dog)
+    -0.095  Persian (Cat)
+    -0.085  Poodle (Dog)
+    -0.056  Golden Retriever (Dog)
+    -0.047  Terrier (Dog)
+    -0.045  Labrador Retriever (Dog)
+    -0.043  American Shorthair (Cat)
+  Correlation with raw features:
+              Type: +0.116
+      MaturitySize: -0.021
+         FurLength: -0.121
+               Age: -0.272
+               Fee: -0.216
+          PhotoAmt: +0.066
+          Quantity: +0.080
+        Vaccinated: +0.056
+        Sterilized: +0.042
+            Health: -0.043
+     AdoptionSpeed: +0.061
+  Example pets at HIGH end of PC3:
+    score=+0.826  PetID=121af879a  Type=Cat  Breeds=Domestic Medium Hair / Domestic Short Hair
+    score=+0.826  PetID=9c26f0fed  Type=Cat  Breeds=Domestic Medium Hair / Domestic Short Hair
+    score=+0.826  PetID=9197674f9  Type=Cat  Breeds=Domestic Medium Hair / Domestic Short Hair
+    score=+0.826  PetID=082a9b790  Type=Cat  Breeds=Domestic Medium Hair / Domestic Short Hair
+    score=+0.826  PetID=b1dd64fa6  Type=Cat  Breeds=Domestic Short Hair / Domestic Medium Hair
+  Example pets at LOW end of PC3:
+    score=-0.696  PetID=abf38029d  Type=Cat  Breeds=Domestic Long Hair / Tabby
+    score=-0.696  PetID=c6942a43f  Type=Cat  Breeds=Tabby / Domestic Long Hair
+    score=-0.696  PetID=0a7798d2b  Type=Cat  Breeds=Domestic Long Hair / Tabby
+    score=-0.696  PetID=6aeef2649  Type=Cat  Breeds=Tabby / Domestic Long Hair
+    score=-0.696  PetID=89c8b19eb  Type=Cat  Breeds=Domestic Long Hair / Tabby
+
+--------------------
+PC4  (explained variance: 3.3%)  suggested label: no strong signal
+--------------------
+  Top +10 breed loadings (positive end):
+    +0.896  Tabby (Cat)
+    +0.058  Domestic Medium Hair (Cat)
+    +0.054  Mixed Breed (Dog)
+    +0.031  Domestic Short Hair (Cat)
+    +0.003  Tiger (Cat)
+    +0.002  Pixie-Bob (Cat)
+    +0.001  Burmese (Cat)
+    +0.001  Silver (Cat)
+    +0.001  Manx (Cat)
+    +0.000  Yellow Labrador Retriever (Dog)
+  Top -10 breed loadings (negative end):
+    -0.383  Domestic Long Hair (Cat)
+    -0.189  Persian (Cat)
+    -0.047  Shih Tzu (Dog)
+    -0.038  Poodle (Dog)
+    -0.030  Labrador Retriever (Dog)
+    -0.028  Terrier (Dog)
+    -0.025  Golden Retriever (Dog)
+    -0.021  Siamese (Cat)
+    -0.017  Maine Coon (Cat)
+    -0.013  Schnauzer (Dog)
+  Correlation with raw features:
+              Type: +0.062
+      MaturitySize: -0.044
+         FurLength: -0.203
+               Age: -0.083
+               Fee: -0.111
+          PhotoAmt: +0.031
+          Quantity: +0.017
+        Vaccinated: +0.011
+        Sterilized: -0.018
+            Health: -0.003
+     AdoptionSpeed: +0.031
+  Example pets at HIGH end of PC4:
+    score=+0.906  PetID=ab35738e4  Type=Cat  Breeds=Tabby / Domestic Medium Hair
+    score=+0.906  PetID=80599c4f4  Type=Cat  Breeds=Domestic Medium Hair / Tabby
+    score=+0.906  PetID=7ec0fc838  Type=Cat  Breeds=Tabby / Domestic Medium Hair
+    score=+0.906  PetID=678140b71  Type=Cat  Breeds=Domestic Medium Hair / Tabby
+    score=+0.906  PetID=0bdd7f7ac  Type=Cat  Breeds=Domestic Medium Hair / Tabby
+  Example pets at LOW end of PC4:
+    score=-0.620  PetID=651d63dd7  Type=Cat  Breeds=Persian / Domestic Long Hair
+    score=-0.620  PetID=abe8790ba  Type=Cat  Breeds=Persian / Domestic Long Hair
+    score=-0.620  PetID=147bd18e0  Type=Cat  Breeds=Persian / Domestic Long Hair
+    score=-0.620  PetID=166345ac8  Type=Cat  Breeds=Persian / Domestic Long Hair
+    score=-0.620  PetID=daed3d063  Type=Cat  Breeds=Persian / Domestic Long Hair
+
+--------------------
+PC5  (explained variance: 2.8%)  suggested label: no strong signal
+--------------------
+  Top +10 breed loadings (positive end):
+    +0.793  Domestic Long Hair (Cat)
+    +0.337  Tabby (Cat)
+    +0.217  Persian (Cat)
+    +0.115  Mixed Breed (Dog)
+    +0.095  Domestic Short Hair (Cat)
+    +0.075  Domestic Medium Hair (Cat)
+    +0.005  Maine Coon (Cat)
+    +0.003  Korat (Cat)
+    +0.002  Dilute Tortoiseshell (Cat)
+    +0.002  Munchkin (Cat)
+  Top -10 breed loadings (negative end):
+    -0.333  Siamese (Cat)
+    -0.145  Shih Tzu (Dog)
+    -0.114  Poodle (Dog)
+    -0.111  Labrador Retriever (Dog)
+    -0.097  Terrier (Dog)
+    -0.072  Golden Retriever (Dog)
+    -0.040  American Shorthair (Cat)
+    -0.035  Schnauzer (Dog)
+    -0.034  Oriental Short Hair (Cat)
+    -0.032  Beagle (Dog)
+  Correlation with raw features:
+              Type: +0.172
+      MaturitySize: +0.072
+         FurLength: +0.170
+               Age: -0.153
+               Fee: -0.015
+          PhotoAmt: +0.041
+          Quantity: +0.037
+        Vaccinated: +0.051
+        Sterilized: +0.025
+            Health: -0.024
+     AdoptionSpeed: +0.009
+  Example pets at HIGH end of PC5:
+    score=+1.029  PetID=ad002785c  Type=Cat  Breeds=Domestic Long Hair / Tabby
+    score=+1.029  PetID=0a7798d2b  Type=Cat  Breeds=Domestic Long Hair / Tabby
+    score=+1.029  PetID=4e4ceb08b  Type=Cat  Breeds=Domestic Long Hair / Tabby
+    score=+1.029  PetID=be8901107  Type=Cat  Breeds=Tabby / Domestic Long Hair
+    score=+1.029  PetID=89c8b19eb  Type=Cat  Breeds=Domestic Long Hair / Tabby
+  Example pets at LOW end of PC5:
+    score=-0.473  PetID=26a07719d  Type=Cat  Breeds=American Shorthair / Siamese
+    score=-0.467  PetID=94d65e361  Type=Cat  Breeds=Siamese / Oriental Short Hair
+    score=-0.467  PetID=b1db9573c  Type=Cat  Breeds=Siamese / Oriental Short Hair
+    score=-0.467  PetID=03cdd9324  Type=Cat  Breeds=Siamese / Oriental Short Hair
+    score=-0.467  PetID=6518a598b  Type=Cat  Breeds=Oriental Short Hair / Siamese
+
+--------------------
+PC6  (explained variance: 2.5%)  suggested label: no strong signal
+--------------------
+  Top +10 breed loadings (positive end):
+    +0.909  Siamese (Cat)
+    +0.180  Domestic Long Hair (Cat)
+    +0.125  Persian (Cat)
+    +0.100  Mixed Breed (Dog)
+    +0.084  Tabby (Cat)
+    +0.064  Domestic Short Hair (Cat)
+    +0.052  Domestic Medium Hair (Cat)
+    +0.021  Burmese (Cat)
+    +0.014  Bengal (Cat)
+    +0.011  Maine Coon (Cat)
+  Top -10 breed loadings (negative end):
+    -0.166  Shih Tzu (Dog)
+    -0.158  Labrador Retriever (Dog)
+    -0.127  Poodle (Dog)
+    -0.123  Terrier (Dog)
+    -0.081  Golden Retriever (Dog)
+    -0.037  Schnauzer (Dog)
+    -0.036  Calico (Cat)
+    -0.036  American Shorthair (Cat)
+    -0.033  Beagle (Dog)
+    -0.030  Spitz (Dog)
+  Correlation with raw features:
+              Type: +0.185
+      MaturitySize: +0.018
+         FurLength: -0.018
+               Age: -0.147
+               Fee: -0.051
+          PhotoAmt: +0.026
+          Quantity: +0.031
+        Vaccinated: +0.027
+        Sterilized: +0.007
+            Health: -0.021
+     AdoptionSpeed: -0.011
+  Example pets at HIGH end of PC6:
+    score=+1.003  PetID=351eefe3e  Type=Cat  Breeds=Domestic Long Hair / Siamese
+    score=+1.003  PetID=964dd458f  Type=Cat  Breeds=Siamese / Domestic Long Hair
+    score=+1.003  PetID=b9405015b  Type=Cat  Breeds=Domestic Long Hair / Siamese
+    score=+1.003  PetID=2d5eababe  Type=Cat  Breeds=Domestic Long Hair / Siamese
+    score=+1.003  PetID=b98610e10  Type=Cat  Breeds=Siamese / Domestic Long Hair
+  Example pets at LOW end of PC6:
+    score=-0.380  PetID=6f8ae496e  Type=Dog  Breeds=Shih Tzu / Poodle
+    score=-0.380  PetID=b985b4ff9  Type=Dog  Breeds=Shih Tzu / Poodle
+    score=-0.380  PetID=a2e529567  Type=Dog  Breeds=Shih Tzu / Poodle
+    score=-0.380  PetID=8b17616d3  Type=Dog  Breeds=Poodle / Shih Tzu
+    score=-0.380  PetID=37cec5261  Type=Dog  Breeds=Poodle / Shih Tzu
+
+--------------------
+PC7  (explained variance: 2.1%)  suggested label: no strong signal
+--------------------
+  Top +10 breed loadings (positive end):
+    +0.943  Labrador Retriever (Dog)
+    +0.098  Domestic Long Hair (Cat)
+    +0.079  Siamese (Cat)
+    +0.065  Golden Retriever (Dog)
+    +0.036  Tabby (Cat)
+    +0.026  Domestic Short Hair (Cat)
+    +0.025  Domestic Medium Hair (Cat)
+    +0.010  Beagle (Dog)
+    +0.010  Samoyed (Dog)
+    +0.007  Mixed Breed (Dog)
+  Top -10 breed loadings (negative end):
+    -0.211  Terrier (Dog)
+    -0.152  Shih Tzu (Dog)
+    -0.105  Poodle (Dog)
+    -0.081  Persian (Cat)
+    -0.027  Schnauzer (Dog)
+    -0.018  Calico (Cat)
+    -0.017  American Shorthair (Cat)
+    -0.014  Miniature Pinscher (Dog)
+    -0.013  Rottweiler (Dog)
+    -0.011  Oriental Short Hair (Cat)
+  Correlation with raw features:
+              Type: +0.004
+      MaturitySize: +0.123
+         FurLength: -0.052
+               Age: -0.023
+               Fee: -0.043
+          PhotoAmt: +0.011
+          Quantity: +0.003
+        Vaccinated: +0.033
+        Sterilized: -0.004
+            Health: -0.016
+     AdoptionSpeed: -0.014
+  Example pets at HIGH end of PC7:
+    score=+0.981  PetID=409ccc60e  Type=Dog  Breeds=Golden Retriever / Labrador Retriever
+    score=+0.981  PetID=24dfcc985  Type=Dog  Breeds=Golden Retriever / Labrador Retriever
+    score=+0.981  PetID=7115607a0  Type=Dog  Breeds=Golden Retriever / Labrador Retriever
+    score=+0.981  PetID=24573b56d  Type=Dog  Breeds=Labrador Retriever / Golden Retriever
+    score=+0.981  PetID=7ecaa8636  Type=Dog  Breeds=Golden Retriever / Labrador Retriever
+  Example pets at LOW end of PC7:
+    score=-0.390  PetID=f4fb11803  Type=Dog  Breeds=Terrier / Shih Tzu
+    score=-0.390  PetID=1fd342e17  Type=Dog  Breeds=Terrier / Shih Tzu
+    score=-0.390  PetID=9668972cc  Type=Dog  Breeds=Shih Tzu / Terrier
+    score=-0.390  PetID=1a76190c5  Type=Dog  Breeds=Shih Tzu / Terrier
+    score=-0.390  PetID=9abb10f2f  Type=Dog  Breeds=Terrier / Shih Tzu
+
+--------------------
+PC8  (explained variance: 2.0%)  suggested label: no strong signal
+--------------------
+  Top +10 breed loadings (positive end):
+    +0.911  Persian (Cat)
+    +0.067  Labrador Retriever (Dog)
+    +0.046  Maine Coon (Cat)
+    +0.033  Tabby (Cat)
+    +0.023  Bengal (Cat)
+    +0.014  Mixed Breed (Dog)
+    +0.013  Ragdoll (Cat)
+    +0.009  British Shorthair (Cat)
+    +0.008  Calico (Cat)
+    +0.007  Oriental Long Hair (Cat)
+  Top -10 breed loadings (negative end):
+    -0.344  Domestic Long Hair (Cat)
+    -0.140  Terrier (Dog)
+    -0.099  Siamese (Cat)
+    -0.095  Shih Tzu (Dog)
+    -0.062  Poodle (Dog)
+    -0.015  Schnauzer (Dog)
+    -0.009  Golden Retriever (Dog)
+    -0.008  Spitz (Dog)
+    -0.008  Oriental Short Hair (Cat)
+    -0.007  Tuxedo (Cat)
+  Correlation with raw features:
+              Type: +0.057
+      MaturitySize: +0.052
+         FurLength: +0.032
+               Age: -0.012
+               Fee: +0.083
+          PhotoAmt: -0.007
+          Quantity: -0.002
+        Vaccinated: -0.003
+        Sterilized: +0.003
+            Health: -0.008
+     AdoptionSpeed: -0.024
+  Example pets at HIGH end of PC8:
+    score=+0.945  PetID=8ff3ff516  Type=Cat  Breeds=Persian / Maine Coon
+    score=+0.945  PetID=1c40fd781  Type=Cat  Breeds=Persian / Maine Coon
+    score=+0.945  PetID=b85cdc8a5  Type=Cat  Breeds=Maine Coon / Persian
+    score=+0.945  PetID=046d3a9d9  Type=Cat  Breeds=Persian / Maine Coon
+    score=+0.945  PetID=79314275c  Type=Cat  Breeds=Maine Coon / Persian
+  Example pets at LOW end of PC8:
+    score=-0.454  PetID=c011bc363  Type=Cat  Breeds=Siamese / Domestic Long Hair
+    score=-0.454  PetID=020fbbc9d  Type=Cat  Breeds=Siamese / Domestic Long Hair
+    score=-0.454  PetID=b98610e10  Type=Cat  Breeds=Siamese / Domestic Long Hair
+    score=-0.454  PetID=b9405015b  Type=Cat  Breeds=Domestic Long Hair / Siamese
+    score=-0.454  PetID=0162634c2  Type=Cat  Breeds=Siamese / Domestic Long Hair
+
+--------------------
+PC9  (explained variance: 1.8%)  suggested label: no strong signal
+--------------------
+  Top +10 breed loadings (positive end):
+    +0.941  Terrier (Dog)
+    +0.199  Labrador Retriever (Dog)
+    +0.147  Persian (Cat)
+    +0.082  Siamese (Cat)
+    +0.074  Tabby (Cat)
+    +0.055  Domestic Short Hair (Cat)
+    +0.053  Domestic Long Hair (Cat)
+    +0.051  Domestic Medium Hair (Cat)
+    +0.038  Mixed Breed (Dog)
+    +0.010  Maltese (Dog)
+  Top -10 breed loadings (negative end):
+    -0.110  Golden Retriever (Dog)
+    -0.070  Poodle (Dog)
+    -0.052  American Shorthair (Cat)
+    -0.051  Calico (Cat)
+    -0.047  Rottweiler (Dog)
+    -0.038  German Shepherd Dog (Dog)
+    -0.034  Spitz (Dog)
+    -0.033  Oriental Short Hair (Cat)
+    -0.027  Beagle (Dog)
+    -0.020  Bengal (Cat)
+  Correlation with raw features:
+              Type: -0.002
+      MaturitySize: +0.013
+         FurLength: +0.049
+               Age: -0.046
+               Fee: -0.008
+          PhotoAmt: +0.043
+          Quantity: -0.008
+        Vaccinated: +0.003
+        Sterilized: -0.019
+            Health: -0.019
+     AdoptionSpeed: -0.009
+  Example pets at HIGH end of PC9:
+    score=+1.080  PetID=f48338adb  Type=Dog  Breeds=Labrador Retriever / Terrier
+    score=+1.080  PetID=5b22f97b3  Type=Dog  Breeds=Labrador Retriever / Terrier
+    score=+0.920  PetID=134e12e92  Type=Dog  Breeds=Mixed Breed / Terrier
+    score=+0.920  PetID=30ca259ed  Type=Dog  Breeds=Terrier / Mixed Breed
+    score=+0.920  PetID=10711bb95  Type=Dog  Breeds=Terrier / Mixed Breed
+  Example pets at LOW end of PC9:
+    score=-0.239  PetID=37ae0cd69  Type=Dog  Breeds=Golden Retriever / Poodle
+    score=-0.216  PetID=37bf6da18  Type=Dog  Breeds=Golden Retriever / Rottweiler
+    score=-0.208  PetID=26edfaa28  Type=Dog  Breeds=German Shepherd Dog / Golden Retriever
+    score=-0.203  PetID=ccd36a0f2  Type=Dog  Breeds=Golden Retriever / Spitz
+    score=-0.203  PetID=4792b6d06  Type=Dog  Breeds=Golden Retriever / Spitz
+
+--------------------
+PC10  (explained variance: 1.5%)  suggested label: no strong signal
+--------------------
+  Top +10 breed loadings (positive end):
+    +0.879  Shih Tzu (Dog)
+    +0.099  Labrador Retriever (Dog)
+    +0.067  Persian (Cat)
+    +0.054  Siamese (Cat)
+    +0.050  Mixed Breed (Dog)
+    +0.050  Tabby (Cat)
+    +0.046  Domestic Long Hair (Cat)
+    +0.043  Domestic Short Hair (Cat)
+    +0.040  Domestic Medium Hair (Cat)
+    +0.016  Pekingese (Dog)
+  Top -10 breed loadings (negative end):
+    -0.333  Golden Retriever (Dog)
+    -0.232  Poodle (Dog)
+    -0.115  Terrier (Dog)
+    -0.067  Calico (Cat)
+    -0.060  American Shorthair (Cat)
+    -0.055  German Shepherd Dog (Dog)
+    -0.042  Rottweiler (Dog)
+    -0.040  Beagle (Dog)
+    -0.035  Oriental Short Hair (Cat)
+    -0.028  Bengal (Cat)
+  Correlation with raw features:
+              Type: -0.026
+      MaturitySize: -0.108
+         FurLength: +0.046
+               Age: +0.056
+               Fee: +0.001
+          PhotoAmt: -0.001
+          Quantity: +0.001
+        Vaccinated: +0.010
+        Sterilized: +0.020
+            Health: +0.038
+     AdoptionSpeed: -0.011
+  Example pets at HIGH end of PC10:
+    score=+0.885  PetID=924cc5438  Type=Dog  Breeds=Shih Tzu / Mixed Breed
+    score=+0.885  PetID=bfed6fcaa  Type=Dog  Breeds=Shih Tzu / Mixed Breed
+    score=+0.885  PetID=f91147e5f  Type=Dog  Breeds=Shih Tzu / Mixed Breed
+    score=+0.885  PetID=2fdc23bcb  Type=Dog  Breeds=Shih Tzu / Mixed Breed
+    score=+0.885  PetID=a7d9451a5  Type=Dog  Breeds=Shih Tzu / Mixed Breed
+  Example pets at LOW end of PC10:
+    score=-0.610  PetID=37ae0cd69  Type=Dog  Breeds=Golden Retriever / Poodle
+    score=-0.493  PetID=743b67b44  Type=Dog  Breeds=Golden Retriever / Terrier
+    score=-0.433  PetID=26edfaa28  Type=Dog  Breeds=German Shepherd Dog / Golden Retriever
+    score=-0.420  PetID=37bf6da18  Type=Dog  Breeds=Golden Retriever / Rottweiler
+    score=-0.419  PetID=6c803e00e  Type=Dog  Breeds=Beagle / Golden Retriever
+
+--------------------
+PC11  (explained variance: 1.4%)  suggested label: no strong signal
+--------------------
+  Top +10 breed loadings (positive end):
+    +0.803  Poodle (Dog)
+    +0.100  Labrador Retriever (Dog)
+    +0.075  Schnauzer (Dog)
+    +0.041  Persian (Cat)
+    +0.034  Siamese (Cat)
+    +0.034  Mixed Breed (Dog)
+    +0.032  Tabby (Cat)
+    +0.030  Domestic Long Hair (Cat)
+    +0.029  Domestic Short Hair (Cat)
+    +0.027  Domestic Medium Hair (Cat)
+  Top -10 breed loadings (negative end):
+    -0.557  Golden Retriever (Dog)
+    -0.059  Terrier (Dog)
+    -0.057  German Shepherd Dog (Dog)
+    -0.055  Calico (Cat)
+    -0.048  Shih Tzu (Dog)
+    -0.047  American Shorthair (Cat)
+    -0.044  Spitz (Dog)
+    -0.040  Rottweiler (Dog)
+    -0.026  Oriental Short Hair (Cat)
+    -0.023  Bengal (Cat)
+  Correlation with raw features:
+              Type: -0.024
+      MaturitySize: -0.137
+         FurLength: -0.030
+               Age: -0.003
+               Fee: +0.059
+          PhotoAmt: -0.019
+          Quantity: -0.004
+        Vaccinated: +0.013
+        Sterilized: +0.014
+            Health: +0.002
+     AdoptionSpeed: -0.019
+  Example pets at HIGH end of PC11:
+    score=+0.848  PetID=664a120bf  Type=Dog  Breeds=Schnauzer / Poodle
+    score=+0.848  PetID=1cd970978  Type=Dog  Breeds=Poodle / Schnauzer
+    score=+0.848  PetID=5493d0771  Type=Dog  Breeds=Schnauzer / Poodle
+    score=+0.848  PetID=eddc2e2ae  Type=Dog  Breeds=Poodle / Schnauzer
+    score=+0.848  PetID=6f41847b5  Type=Dog  Breeds=Poodle / Schnauzer
+  Example pets at LOW end of PC11:
+    score=-0.646  PetID=743b67b44  Type=Dog  Breeds=Golden Retriever / Terrier
+    score=-0.644  PetID=26edfaa28  Type=Dog  Breeds=German Shepherd Dog / Golden Retriever
+    score=-0.631  PetID=ccd36a0f2  Type=Dog  Breeds=Golden Retriever / Spitz
+    score=-0.631  PetID=4792b6d06  Type=Dog  Breeds=Golden Retriever / Spitz
+    score=-0.627  PetID=37bf6da18  Type=Dog  Breeds=Golden Retriever / Rottweiler
+
+--------------------
+PC12  (explained variance: 1.3%)  suggested label: no strong signal
+--------------------
+  Top +10 breed loadings (positive end):
+    +0.708  Golden Retriever (Dog)
+    +0.415  Poodle (Dog)
+    +0.276  Shih Tzu (Dog)
+    +0.098  Persian (Cat)
+    +0.084  Siamese (Cat)
+    +0.081  Tabby (Cat)
+    +0.079  Mixed Breed (Dog)
+    +0.076  Domestic Long Hair (Cat)
+    +0.076  Domestic Short Hair (Cat)
+    +0.071  Domestic Medium Hair (Cat)
+  Top -10 breed loadings (negative end):
+    -0.239  Calico (Cat)
+    -0.233  German Shepherd Dog (Dog)
+    -0.174  American Shorthair (Cat)
+    -0.117  Rottweiler (Dog)
+    -0.106  Spitz (Dog)
+    -0.087  Bengal (Cat)
+    -0.086  Oriental Short Hair (Cat)
+    -0.084  Beagle (Dog)
+    -0.061  Miniature Pinscher (Dog)
+    -0.047  Jack Russell Terrier (Dog)
+  Correlation with raw features:
+              Type: -0.099
+      MaturitySize: -0.000
+         FurLength: +0.138
+               Age: +0.091
+               Fee: +0.038
+          PhotoAmt: +0.002
+          Quantity: -0.013
+        Vaccinated: -0.028
+        Sterilized: +0.006
+            Health: +0.028
+     AdoptionSpeed: -0.043
+  Example pets at HIGH end of PC12:
+    score=+1.045  PetID=37ae0cd69  Type=Dog  Breeds=Golden Retriever / Poodle
+    score=+0.709  PetID=b65fd06e2  Type=Dog  Breeds=Golden Retriever / Mixed Breed
+    score=+0.709  PetID=73dedcf29  Type=Dog  Breeds=Golden Retriever / Mixed Breed
+    score=+0.709  PetID=ac45f71e3  Type=Dog  Breeds=Golden Retriever / Mixed Breed
+    score=+0.709  PetID=0be7a4adf  Type=Dog  Breeds=Golden Retriever / Mixed Breed
+  Example pets at LOW end of PC12:
+    score=-0.491  PetID=3ff23c65c  Type=Cat  Breeds=Calico / American Shorthair
+    score=-0.491  PetID=0dca551f0  Type=Cat  Breeds=Calico / American Shorthair
+    score=-0.428  PetID=04dc94c39  Type=Dog  Breeds=German Shepherd Dog / Rottweiler
+    score=-0.428  PetID=68ac3848d  Type=Dog  Breeds=Rottweiler / German Shepherd Dog
+    score=-0.428  PetID=f252006a7  Type=Dog  Breeds=German Shepherd Dog / Rottweiler
+
+--------------------
+PC13  (explained variance: 1.1%)  suggested label: no strong signal
+--------------------
+  Top +10 breed loadings (positive end):
+    +0.905  German Shepherd Dog (Dog)
+    +0.136  Spitz (Dog)
+    +0.081  Poodle (Dog)
+    +0.066  Golden Retriever (Dog)
+    +0.057  Shih Tzu (Dog)
+    +0.033  Persian (Cat)
+    +0.027  Domestic Short Hair (Cat)
+    +0.026  Tabby (Cat)
+    +0.026  Domestic Medium Hair (Cat)
+    +0.025  Siamese (Cat)
+  Top -10 breed loadings (negative end):
+    -0.342  Calico (Cat)
+    -0.122  American Shorthair (Cat)
+    -0.061  Bengal (Cat)
+    -0.041  Oriental Short Hair (Cat)
+    -0.030  Tortoiseshell (Cat)
+    -0.028  Jack Russell Terrier (Dog)
+    -0.024  Beagle (Dog)
+    -0.023  British Shorthair (Cat)
+    -0.022  Tuxedo (Cat)
+    -0.011  Dalmatian (Dog)
+  Correlation with raw features:
+              Type: -0.084
+      MaturitySize: +0.070
+         FurLength: +0.075
+               Age: +0.056
+               Fee: +0.072
+          PhotoAmt: -0.002
+          Quantity: -0.034
+        Vaccinated: -0.008
+        Sterilized: -0.004
+            Health: +0.003
+     AdoptionSpeed: -0.041
+  Example pets at HIGH end of PC13:
+    score=+1.016  PetID=7d6d03de2  Type=Dog  Breeds=Spitz / German Shepherd Dog
+    score=+1.016  PetID=8f2daa8e3  Type=Dog  Breeds=German Shepherd Dog / Spitz
+    score=+1.016  PetID=34b96cf6a  Type=Dog  Breeds=German Shepherd Dog / Spitz
+    score=+1.016  PetID=69f9ebfbc  Type=Dog  Breeds=German Shepherd Dog / Spitz
+    score=+0.947  PetID=26edfaa28  Type=Dog  Breeds=German Shepherd Dog / Golden Retriever
+  Example pets at LOW end of PC13:
+    score=-0.488  PetID=0dca551f0  Type=Cat  Breeds=Calico / American Shorthair
+    score=-0.488  PetID=3ff23c65c  Type=Cat  Breeds=Calico / American Shorthair
+    score=-0.428  PetID=90c5437de  Type=Cat  Breeds=Bengal / Calico
+    score=-0.397  PetID=0c5b71bf0  Type=Cat  Breeds=Calico / Tortoiseshell
+    score=-0.397  PetID=49ba2ccff  Type=Cat  Breeds=Tortoiseshell / Calico
+
+--------------------
+PC14  (explained variance: 1.0%)  suggested label: no strong signal
+--------------------
+  Top +10 breed loadings (positive end):
+    +0.757  Calico (Cat)
+    +0.314  German Shepherd Dog (Dog)
+    +0.092  Golden Retriever (Dog)
+    +0.088  Shih Tzu (Dog)
+    +0.087  Poodle (Dog)
+    +0.035  Tortoiseshell (Cat)
+    +0.033  Siamese (Cat)
+    +0.032  Mixed Breed (Dog)
+    +0.030  Domestic Long Hair (Cat)
+    +0.025  Tabby (Cat)
+  Top -10 breed loadings (negative end):
+    -0.496  Spitz (Dog)
+    -0.127  Rottweiler (Dog)
+    -0.117  American Shorthair (Cat)
+    -0.075  Beagle (Dog)
+    -0.072  Bengal (Cat)
+    -0.064  Oriental Short Hair (Cat)
+    -0.051  Miniature Pinscher (Dog)
+    -0.030  Jack Russell Terrier (Dog)
+    -0.023  Cocker Spaniel (Dog)
+    -0.021  Doberman Pinscher (Dog)
+  Correlation with raw features:
+              Type: +0.040
+      MaturitySize: +0.006
+         FurLength: +0.010
+               Age: -0.028
+               Fee: +0.013
+          PhotoAmt: +0.014
+          Quantity: +0.005
+        Vaccinated: -0.003
+        Sterilized: -0.007
+            Health: +0.008
+     AdoptionSpeed: -0.004
+  Example pets at HIGH end of PC14:
+    score=+0.761  PetID=5bbc1017c  Type=Cat  Breeds=Calico / Tortoiseshell
+    score=+0.761  PetID=49ba2ccff  Type=Cat  Breeds=Tortoiseshell / Calico
+    score=+0.761  PetID=0c5b71bf0  Type=Cat  Breeds=Calico / Tortoiseshell
+    score=+0.761  PetID=b36616178  Type=Cat  Breeds=Calico / Tortoiseshell
+    score=+0.761  PetID=934546487  Type=Cat  Breeds=Calico / Tortoiseshell
+  Example pets at LOW end of PC14:
+    score=-0.653  PetID=89d4cef63  Type=Dog  Breeds=Spitz / Rottweiler
+    score=-0.601  PetID=d01112d4a  Type=Dog  Breeds=Beagle / Spitz
+    score=-0.577  PetID=a99a82e6d  Type=Dog  Breeds=Spitz / Miniature Pinscher
+    score=-0.577  PetID=5fed61438  Type=Dog  Breeds=Miniature Pinscher / Spitz
+    score=-0.577  PetID=9c8209bae  Type=Dog  Breeds=Miniature Pinscher / Spitz
+
+--------------------
+PC15  (explained variance: 1.0%)  suggested label: no strong signal
+--------------------
+  Top +10 breed loadings (positive end):
+    +0.823  Spitz (Dog)
+    +0.424  Calico (Cat)
+    +0.075  Poodle (Dog)
+    +0.053  Golden Retriever (Dog)
+    +0.039  Shih Tzu (Dog)
+    +0.035  Siamese (Cat)
+    +0.029  Domestic Long Hair (Cat)
+    +0.028  Tabby (Cat)
+    +0.027  Miniature Pinscher (Dog)
+    +0.027  Persian (Cat)
+  Top -10 breed loadings (negative end):
+    -0.226  Rottweiler (Dog)
+    -0.214  American Shorthair (Cat)
+    -0.121  Bengal (Cat)
+    -0.077  Oriental Short Hair (Cat)
+    -0.059  Beagle (Dog)
+    -0.039  Jack Russell Terrier (Dog)
+    -0.027  Schnauzer (Dog)
+    -0.025  Tuxedo (Cat)
+    -0.022  German Shepherd Dog (Dog)
+    -0.014  Doberman Pinscher (Dog)
+  Correlation with raw features:
+              Type: -0.023
+      MaturitySize: -0.031
+         FurLength: +0.085
+               Age: +0.020
+               Fee: -0.027
+          PhotoAmt: +0.036
+          Quantity: +0.004
+        Vaccinated: -0.011
+        Sterilized: -0.031
+            Health: -0.015
+     AdoptionSpeed: +0.016
+  Example pets at HIGH end of PC15:
+    score=+0.867  PetID=f3b29563b  Type=Dog  Breeds=Poodle / Spitz
+    score=+0.845  PetID=ccd36a0f2  Type=Dog  Breeds=Golden Retriever / Spitz
+    score=+0.845  PetID=4792b6d06  Type=Dog  Breeds=Golden Retriever / Spitz
+    score=+0.831  PetID=1bff3e46f  Type=Dog  Breeds=Spitz / Shih Tzu
+    score=+0.831  PetID=e4eccb132  Type=Dog  Breeds=Spitz / Shih Tzu
+  Example pets at LOW end of PC15:
+    score=-0.366  PetID=b56e6500a  Type=Cat  Breeds=Bengal / American Shorthair
+    score=-0.366  PetID=27c0034f8  Type=Cat  Breeds=Bengal / American Shorthair
+    score=-0.366  PetID=d41f2a466  Type=Cat  Breeds=American Shorthair / Bengal
+    score=-0.366  PetID=30e900b4a  Type=Cat  Breeds=Bengal / American Shorthair
+    score=-0.366  PetID=f98b9d62a  Type=Cat  Breeds=Bengal / American Shorthair
+
+==============================================================================
+Summary - suggested axis labels
+==============================================================================
+  PC1 ( 38.3% var): -Type(-0.87)
+  PC2 ( 15.1% var): -FurLength(-0.45)
+  PC3 (  6.6% var): no strong signal
+  PC4 (  3.3% var): no strong signal
+  PC5 (  2.8% var): no strong signal
+  PC6 (  2.5% var): no strong signal
+  PC7 (  2.1% var): no strong signal
+  PC8 (  2.0% var): no strong signal
+  PC9 (  1.8% var): no strong signal
+  PC10 (  1.5% var): no strong signal
+  PC11 (  1.4% var): no strong signal
+  PC12 (  1.3% var): no strong signal
+  PC13 (  1.1% var): no strong signal
+  PC14 (  1.0% var): no strong signal
+  PC15 (  1.0% var): no strong signal

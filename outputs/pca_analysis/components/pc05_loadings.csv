@@ -1,0 +1,308 @@
+rank,breed_id,breed_name,type,loading
+1,264,Domestic Long Hair,Cat,0.792948
+2,299,Tabby,Cat,0.336794
+3,285,Persian,Cat,0.216978
+4,307,Mixed Breed,Dog,0.114634
+5,266,Domestic Short Hair,Cat,0.09516
+6,265,Domestic Medium Hair,Cat,0.074927
+7,276,Maine Coon,Cat,0.005141
+8,274,Korat,Cat,0.002515
+9,263,Dilute Tortoiseshell,Cat,0.001877
+10,278,Munchkin,Cat,0.001707
+11,248,Birman,Cat,0.001527
+12,289,Russian Blue,Cat,0.00151
+13,288,Ragdoll,Cat,0.000857
+14,253,Burmilla,Cat,0.000776
+15,280,Norwegian Forest Cat,Cat,0.000771
+16,301,Tonkinese,Cat,0.000648
+17,286,Pixie-Bob,Cat,0.000626
+18,239,Yellow Labrador Retriever,Dog,0.000496
+19,249,Bobtail,Cat,0.000322
+20,291,Selkirk Rex,Cat,0.000308
+21,282,Oriental Long Hair,Cat,0.000245
+22,304,Turkish Angora,Cat,0.000147
+23,32,Black Mouth Cur,Dog,0.000111
+24,224,Toy Fox Terrier,Dog,0.000111
+25,176,Pointer,Dog,7.4e-05
+26,197,Scottish Terrier Scottie,Dog,7.4e-05
+27,71,Coonhound,Dog,7.4e-05
+28,88,English Springer Spaniel,Dog,7.4e-05
+29,14,Australian Cattle Dog/Blue Heeler,Dog,7.4e-05
+30,93,Field Spaniel,Dog,3.7e-05
+31,85,English Pointer,Dog,3.7e-05
+32,104,German Shorthaired Pointer,Dog,3.7e-05
+33,81,Dutch Shepherd,Dog,3.7e-05
+34,210,Smooth Fox Terrier,Dog,3.7e-05
+35,64,Chocolate Labrador Retriever,Dog,3.7e-05
+36,36,Bluetick Coonhound,Dog,3.7e-05
+37,123,Irish Terrier,Dog,3.7e-05
+38,40,Border Terrier,Dog,3.7e-05
+39,28,Bernese Mountain Dog,Dog,0.0
+40,30,Black and Tan Coonhound,Dog,0.0
+41,37,Boerboel,Dog,0.0
+42,211,South Russian Ovtcharka,Dog,0.0
+43,121,Illyrian Sheepdog,Dog,0.0
+44,161,Norwegian Elkhound,Dog,0.0
+45,124,Irish Water Spaniel,Dog,0.0
+46,126,Italian Greyhound,Dog,0.0
+47,209,Sloughi,Dog,0.0
+48,171,Petit Basset Griffon Vendeen,Dog,0.0
+49,170,Peruvian Inca Orchid,Dog,0.0
+50,127,Italian Spinone,Dog,0.0
+51,216,Sussex Spaniel,Dog,0.0
+52,120,Ibizan Hound,Dog,0.0
+53,118,Hovawart,Dog,0.0
+54,116,Havanese,Dog,0.0
+55,208,Skye Terrier,Dog,0.0
+56,113,Greater Swiss Mountain Dog,Dog,0.0
+57,112,Great Pyrenees,Dog,0.0
+58,219,Thai Ridgeback,Dog,0.0
+59,110,Gordon Setter,Dog,0.0
+60,220,Tibetan Mastiff,Dog,0.0
+61,107,Giant Schnauzer,Dog,0.0
+62,106,German Wirehaired Pointer,Dog,0.0
+63,221,Tibetan Spaniel,Dog,0.0
+64,222,Tibetan Terrier,Dog,0.0
+65,223,Tosa Inu,Dog,0.0
+66,175,Podengo Portugueso,Dog,0.0
+67,134,Keeshond,Dog,0.0
+68,131,Jindo,Dog,0.0
+69,149,Maremma Sheepdog,Dog,0.0
+70,160,Norwegian Buhund,Dog,0.0
+71,180,Portuguese Water Dog,Dog,0.0
+72,158,Newfoundland Dog,Dog,0.0
+73,163,Norwich Terrier,Dog,0.0
+74,157,New Guinea Singing Dog,Dog,0.0
+75,156,Neapolitan Mastiff,Dog,0.0
+76,181,Presa Canario,Dog,0.0
+77,183,Puli,Dog,0.0
+78,164,Nova Scotia Duck-Tolling Retriever,Dog,0.0
+79,153,Mountain Cur,Dog,0.0
+80,184,Pumi,Dog,0.0
+81,177,Polish Lowland Sheepdog,Dog,0.0
+82,151,McNab,Dog,0.0
+83,186,Redbone Coonhound,Dog,0.0
+84,191,Saluki,Dog,0.0
+85,133,Karelian Bear Dog,Dog,0.0
+86,166,Otterhound,Dog,0.0
+87,101,Galgo Spanish Greyhound,Dog,0.0
+88,194,Schipperke,Dog,0.0
+89,144,Leonberger,Dog,0.0
+90,196,Scottish Deerhound,Dog,0.0
+91,142,Lakeland Terrier,Dog,0.0
+92,140,Kyi Leo,Dog,0.0
+93,198,Sealyham Terrier,Dog,0.0
+94,138,Komondor,Dog,0.0
+95,137,Klee Kai,Dog,0.0
+96,136,Kishu,Dog,0.0
+97,135,Kerry Blue Terrier,Dog,0.0
+98,162,Norwegian Lundehund,Dog,0.0
+99,168,Patterdale Terrier (Fell Terrier),Dog,0.0
+100,193,Sarplaninac,Dog,0.0
+101,87,English Shepherd,Dog,0.0
+102,225,Treeing Walker Coonhound,Dog,0.0
+103,67,Clumber Spaniel,Dog,0.0
+104,63,Chinook,Dog,0.0
+105,62,Chinese Foo Dog,Dog,0.0
+106,255,Canadian Hairless,Cat,0.0
+107,226,Vizsla,Dog,0.0
+108,59,Chesapeake Bay Retriever,Dog,0.0
+109,259,Cornish Rex,Cat,0.0
+110,57,Caucasian Sheepdog (Caucasian Ovtcharka),Dog,0.0
+111,261,Devon Rex,Cat,0.0
+112,55,Catahoula Leopard Dog,Dog,0.0
+113,54,Carolina Dog,Dog,0.0
+114,53,Cane Corso Mastiff,Dog,0.0
+115,52,Canaan Dog,Dog,0.0
+116,51,Cairn Terrier,Dog,0.0
+117,48,Brussels Griffon,Dog,0.0
+118,47,Brittany Spaniel,Dog,0.0
+119,46,Briard,Dog,0.0
+120,45,Boykin Spaniel,Dog,0.0
+121,43,Bouvier des Flanders,Dog,0.0
+122,41,Borzoi,Dog,0.0
+123,38,Bolognese,Dog,0.0
+124,34,Bloodhound,Dog,0.0
+125,275,LaPerm,Cat,0.0
+126,27,Belgian Shepherd Tervuren,Dog,0.0
+127,13,Appenzell Mountain Dog,Dog,0.0
+128,12,Anatolian Shepherd,Dog,0.0
+129,66,Cirneco dell'Etna,Dog,0.0
+130,258,Chinchilla,Cat,0.0
+131,90,Entlebucher,Dog,0.0
+132,230,Welsh Terrier,Dog,0.0
+133,229,Welsh Springer Spaniel,Dog,0.0
+134,95,Finnish Lapphund,Dog,0.0
+135,94,Fila Brasileiro,Dog,0.0
+136,92,Feist,Dog,0.0
+137,91,Eskimo Dog,Dog,0.0
+138,89,English Toy Spaniel,Dog,0.0
+139,174,Plott Hound,Dog,0.0
+140,86,English Setter,Dog,0.0
+141,84,English Coonhound,Dog,0.0
+142,172,Pharaoh Hound,Dog,0.0
+143,74,Curly-Coated Retriever,Dog,0.0
+144,235,Wire Fox Terrier,Dog,0.0
+145,68,Cockapoo,Dog,0.0
+146,238,Xoloitzcuintle/Mexican Hairless,Dog,0.0
+147,236,Wire-haired Pointing Griffon,Dog,0.0
+148,73,Coton de Tulear,Dog,0.0
+149,77,Dandi Dinmont Terrier,Dog,0.0
+150,79,Dogo Argentino,Dog,0.0
+151,80,Dogue de Bordeaux,Dog,0.0
+152,35,Blue Lacy,Dog,-0.0
+153,33,Black Russian Terrier,Dog,-0.0
+154,29,Bichon Frise,Dog,-0.0
+155,22,Beauceron,Dog,-0.0
+156,8,American Eskimo Dog,Dog,-0.0
+157,6,Alaskan Malamute,Dog,-0.0
+158,9,American Hairless Terrier,Dog,-0.0
+159,117,Hound,Dog,-2e-06
+160,203,Shetland Sheepdog Sheltie,Dog,-0.000157
+161,202,Shepherd,Dog,-0.000204
+162,16,Australian Shepherd,Dog,-0.000214
+163,233,Whippet,Dog,-0.000231
+164,108,Glen of Imaal Terrier,Dog,-0.000231
+165,148,Manchester Terrier,Dog,-0.000231
+166,96,Finnish Spitz,Dog,-0.00024
+167,7,American Bulldog,Dog,-0.000267
+168,287,Ragamuffin,Cat,-0.000267
+169,23,Bedlington Terrier,Dog,-0.000267
+170,298,Sphynx (hairless cat),Cat,-0.000267
+171,217,Swedish Vallhund,Dog,-0.000267
+172,214,Staffordshire Bull Terrier,Dog,-0.000267
+173,154,Mountain Dog,Dog,-0.000267
+174,99,Foxhound,Dog,-0.000267
+175,165,Old English Sheepdog,Dog,-0.000267
+176,3,Airedale Terrier,Dog,-0.000267
+177,143,Lancashire Heeler,Dog,-0.000268
+178,56,Cattle Dog,Dog,-0.000275
+179,15,Australian Kelpie,Dog,-0.000281
+180,269,Extra-Toes Cat (Hemingway Polydactyl),Cat,-0.000282
+181,159,Norfolk Terrier,Dog,-0.000287
+182,125,Irish Wolfhound,Dog,-0.000287
+183,61,Chinese Crested Dog,Dog,-0.000288
+184,4,Akbash,Dog,-0.0003
+185,139,Kuvasz,Dog,-0.000301
+186,102,German Pinscher,Dog,-0.000383
+187,31,Black Labrador Retriever,Dog,-0.000404
+188,150,Mastiff,Dog,-0.000427
+189,5,Akita,Dog,-0.000467
+190,204,Shiba Inu,Dog,-0.000498
+191,1,Affenpinscher,Dog,-0.000499
+192,114,Greyhound,Dog,-0.000499
+193,228,Welsh Corgi,Dog,-0.000521
+194,2,Afghan Hound,Dog,-0.000525
+195,199,Setter,Dog,-0.000526
+196,130,Japanese Chin,Dog,-0.000533
+197,21,Bearded Collie,Dog,-0.000534
+198,11,American Water Spaniel,Dog,-0.000535
+199,145,Lhasa Apso,Dog,-0.000535
+200,215,Standard Poodle,Dog,-0.000535
+201,232,Wheaten Terrier,Dog,-0.000535
+202,234,White German Shepherd,Dog,-0.000535
+203,132,Kai Dog,Dog,-0.000535
+204,146,Lowchen,Dog,-0.000536
+205,290,Scottish Fold,Cat,-0.000543
+206,257,Chausie,Cat,-0.000551
+207,115,Harrier,Dog,-0.000562
+208,281,Ocicat,Cat,-0.000569
+209,256,Chartreux,Cat,-0.000584
+210,18,Basenji,Dog,-0.000603
+211,227,Weimaraner,Dog,-0.000726
+212,185,Rat Terrier,Dog,-0.000734
+213,10,American Staffordshire Terrier,Dog,-0.000744
+214,187,Retriever,Dog,-0.000788
+215,155,Munsterlander,Dog,-0.000805
+216,25,Belgian Shepherd Laekenois,Dog,-0.000805
+217,65,Chow Chow,Dog,-0.000805
+218,122,Irish Setter,Dog,-0.000807
+219,262,Dilute Calico,Cat,-0.000829
+220,98,Fox Terrier,Dog,-0.000849
+221,293,Siberian,Cat,-0.000875
+222,260,Cymric,Cat,-0.000875
+223,279,Nebelung,Cat,-0.000876
+224,105,German Spitz,Dog,-0.000899
+225,24,Belgian Shepherd Dog Sheepdog,Dog,-0.000932
+226,111,Great Dane,Dog,-0.000972
+227,190,Saint Bernard,Dog,-0.001042
+228,26,Belgian Shepherd Malinois,Dog,-0.001057
+229,58,Cavalier King Charles Spaniel,Dog,-0.001065
+230,100,French Bulldog,Dog,-0.001076
+231,50,Bullmastiff,Dog,-0.001135
+232,302,Torbie,Cat,-0.001184
+233,167,Papillon,Dog,-0.00119
+234,245,Applehead Siamese,Cat,-0.001209
+235,237,Wirehaired Terrier,Dog,-0.001258
+236,97,Flat-coated Retriever,Dog,-0.001258
+237,231,West Highland White Terrier Westie,Dog,-0.001304
+238,240,Yorkshire Terrier Yorkie,Dog,-0.001315
+239,70,Collie,Dog,-0.001325
+240,129,Jack Russell Terrier (Parson Russell Terrier),Dog,-0.001344
+241,82,English Bulldog,Dog,-0.001349
+242,297,Somali,Cat,-0.001349
+243,277,Manx,Cat,-0.001357
+244,244,American Wirehair,Cat,-0.001375
+245,212,Spaniel,Dog,-0.001384
+246,201,Sheep Dog,Dog,-0.0014
+247,42,Boston Terrier,Dog,-0.001429
+248,188,Rhodesian Ridgeback,Dog,-0.001441
+249,273,Javanese,Cat,-0.001642
+250,270,Havana,Cat,-0.001701
+251,294,Silver,Cat,-0.001702
+252,272,Japanese Bobtail,Cat,-0.001715
+253,17,Australian Terrier,Dog,-0.002152
+254,267,Egyptian Mau,Cat,-0.00234
+255,268,Exotic Shorthair,Cat,-0.002378
+256,49,Bull Terrier,Dog,-0.002485
+257,19,Basset Hound,Dog,-0.00253
+258,83,English Cocker Spaniel,Dog,-0.002768
+259,192,Samoyed,Dog,-0.002831
+260,251,British Shorthair,Cat,-0.002867
+261,44,Boxer,Dog,-0.002962
+262,246,Balinese,Cat,-0.003042
+263,305,Turkish Van,Cat,-0.003085
+264,72,Corgi,Dog,-0.003141
+265,241,Abyssinian,Cat,-0.003182
+266,296,Snowshoe,Cat,-0.003305
+267,173,Pit Bull Terrier,Dog,-0.003535
+268,200,Shar Pei,Dog,-0.003643
+269,242,American Curl,Cat,-0.003705
+270,250,Bombay,Cat,-0.003733
+271,271,Himalayan,Cat,-0.003994
+272,284,Oriental Tabby,Cat,-0.004265
+273,300,Tiger,Cat,-0.004937
+274,295,Singapura,Cat,-0.006299
+275,303,Tortoiseshell,Cat,-0.006544
+276,182,Pug,Dog,-0.006773
+277,178,Pomeranian,Dog,-0.00716
+278,39,Border Collie,Dog,-0.00761
+279,207,Silky Terrier,Dog,-0.007952
+280,75,Dachshund,Dog,-0.008082
+281,76,Dalmatian,Dog,-0.00819
+282,206,Siberian Husky,Dog,-0.008541
+283,147,Maltese,Dog,-0.009768
+284,306,Tuxedo,Cat,-0.009942
+285,169,Pekingese,Dog,-0.010218
+286,78,Doberman Pinscher,Dog,-0.010257
+287,60,Chihuahua,Dog,-0.012307
+288,69,Cocker Spaniel,Dog,-0.012406
+289,119,Husky,Dog,-0.012906
+290,252,Burmese,Cat,-0.016721
+291,128,Jack Russell Terrier,Dog,-0.017998
+292,152,Miniature Pinscher,Dog,-0.019499
+293,103,German Shepherd Dog,Dog,-0.024138
+294,189,Rottweiler,Dog,-0.024315
+295,247,Bengal,Cat,-0.024966
+296,213,Spitz,Dog,-0.028439
+297,254,Calico,Cat,-0.031598
+298,20,Beagle,Dog,-0.032231
+299,283,Oriental Short Hair,Cat,-0.033859
+300,195,Schnauzer,Dog,-0.035059
+301,243,American Shorthair,Cat,-0.040061
+302,109,Golden Retriever,Dog,-0.072456
+303,218,Terrier,Dog,-0.097466
+304,141,Labrador Retriever,Dog,-0.111337
+305,179,Poodle,Dog,-0.113655
+306,205,Shih Tzu,Dog,-0.144701
+307,292,Siamese,Cat,-0.332544

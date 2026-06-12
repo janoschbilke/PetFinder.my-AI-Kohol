@@ -45,6 +45,13 @@
 
 2. pca analysis
 
+![Explained Variance](../outputs/pca_analysis/breed_pca_explained_variance.png)
+![Breed Loadings](../outputs/pca_analysis/breed_pca_loadings.png)
+![Breed Correlations](../outputs/pca_analysis/breed_pca_correlations.png)
+
+- Since there are always just a maximum of 2 breeds, there are not many semantic correlations
+- Most Breeds have almost zero values in most PCs
+
 3. image embeddings
 
 ### Our straw plan

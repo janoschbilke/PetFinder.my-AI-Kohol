@@ -245,7 +245,8 @@ def print_oof_metrics(oof_preds: np.ndarray, oof_labels: np.ndarray, mode: str =
 
 
 def cv_score(
-    X: np.ndarray, y: np.ndarray, feature_cols: list[str], params: dict, mode: str = "full"
+    X: np.ndarray, y: np.ndarray, feature_cols: list[str], params: dict, mode: str = "full",
+    use_smote: bool = False, class_weight_dict: dict | None = None,
 ) -> float:
     """Run K-fold CV and return mean score (QWK for multiclass, AUC for binary)."""
     config = MODE_CONFIGS[mode]
@@ -257,7 +258,16 @@ def cv_score(
         X_tr, X_val = X[train_idx], X[val_idx]
         y_tr, y_val = y[train_idx], y[val_idx]
 
-        dtrain = lgb.Dataset(X_tr, label=y_tr, feature_name=feature_cols, free_raw_data=False)
+        if use_smote:
+            from imblearn.over_sampling import SMOTE
+            k = max(1, min(5, int(np.bincount(y_tr).min()) - 1))
+            X_tr, y_tr = SMOTE(random_state=RANDOM_STATE, k_neighbors=k).fit_resample(X_tr, y_tr)
+
+        sample_weights = (
+            np.array([class_weight_dict[int(label)] for label in y_tr], dtype=np.float32)
+            if class_weight_dict is not None else None
+        )
+        dtrain = lgb.Dataset(X_tr, label=y_tr, weight=sample_weights, feature_name=feature_cols, free_raw_data=False)
         dval = lgb.Dataset(X_val, label=y_val, feature_name=feature_cols, free_raw_data=False)
 
         callbacks = [
@@ -292,7 +302,8 @@ def cv_score(
 
 def tune_hyperparameters(
     X: np.ndarray, y: np.ndarray, feature_cols: list[str],
-    mode: str = "full", n_trials: int = N_TUNING_TRIALS
+    mode: str = "full", n_trials: int = N_TUNING_TRIALS,
+    imbalance_strategy: str = "balanced", use_smote: bool = False,
 ) -> dict:
     """Use Optuna to find the best LightGBM hyperparameters."""
     config = MODE_CONFIGS[mode]
@@ -307,7 +318,6 @@ def tune_hyperparameters(
             "verbosity": -1,
             "seed": RANDOM_STATE,
             "n_jobs": 1,
-            # --- Tunable parameters ---
             "learning_rate": trial.suggest_float("learning_rate", 0.01, 0.15, log=True),
             "num_leaves": trial.suggest_int("num_leaves", 16, 128),
             "max_depth": trial.suggest_int("max_depth", 3, 12),
@@ -321,11 +331,21 @@ def tune_hyperparameters(
 
         if n_classes > 2:
             params["num_class"] = n_classes
-            params["class_weight"] = trial.suggest_categorical("class_weight", ["balanced", None])
+            if imbalance_strategy == "custom_weights":
+                w0 = trial.suggest_float("class_0_weight", 1.0, 20.0)
+                cw_dict = {i: (w0 if i == 0 else 1.0) for i in range(n_classes)}
+                # class_weight as dict is NOT a valid lgbm param — use Dataset weights instead
+            elif use_smote:
+                cw_dict = None
+                params["class_weight"] = None
+            else:
+                cw_dict = None
+                params["class_weight"] = trial.suggest_categorical("class_weight", ["balanced", None])
         else:
+            cw_dict = None
             params["is_unbalance"] = trial.suggest_categorical("is_unbalance", [True, False])
 
-        mean_score = cv_score(X, y, feature_cols, params, mode=mode)
+        mean_score = cv_score(X, y, feature_cols, params, mode=mode, use_smote=use_smote, class_weight_dict=cw_dict)
         return mean_score
 
     # Suppress Optuna's info messages
@@ -385,7 +405,8 @@ def tune_hyperparameters(
 
 def train_and_evaluate(
     X: np.ndarray, y: np.ndarray, feature_cols: list[str],
-    params: dict | None = None, mode: str = "full"
+    params: dict | None = None, mode: str = "full", use_smote: bool = False,
+    class_weight_dict: dict | None = None,
 ) -> tuple[lgb.Booster, np.ndarray, np.ndarray | None]:
     """K-fold stratified CV with LightGBM; returns best model + OOF predictions + OOF probs."""
     config = MODE_CONFIGS[mode]
@@ -397,7 +418,6 @@ def train_and_evaluate(
     skf = StratifiedKFold(n_splits=N_FOLDS, shuffle=True, random_state=RANDOM_STATE)
     oof_preds = np.zeros(len(y), dtype=int)
 
-    # For binary: store probabilities for AUC calculation
     if n_classes == 2:
         oof_probs = np.zeros(len(y), dtype=np.float64)
     else:
@@ -416,7 +436,16 @@ def train_and_evaluate(
         X_tr, X_val = X[train_idx], X[val_idx]
         y_tr, y_val = y[train_idx], y[val_idx]
 
-        dtrain = lgb.Dataset(X_tr, label=y_tr, feature_name=feature_cols, free_raw_data=False)
+        if use_smote:
+            from imblearn.over_sampling import SMOTE
+            k = max(1, min(5, int(np.bincount(y_tr).min()) - 1))
+            X_tr, y_tr = SMOTE(random_state=RANDOM_STATE, k_neighbors=k).fit_resample(X_tr, y_tr)
+
+        sample_weights = (
+            np.array([class_weight_dict[int(label)] for label in y_tr], dtype=np.float32)
+            if class_weight_dict is not None else None
+        )
+        dtrain = lgb.Dataset(X_tr, label=y_tr, weight=sample_weights, feature_name=feature_cols, free_raw_data=False)
         dval = lgb.Dataset(X_val, label=y_val, feature_name=feature_cols, free_raw_data=False)
 
         callbacks = [
@@ -465,16 +494,20 @@ def run(
     n_trials: int = N_TUNING_TRIALS,
     feature_suffix: str | None = None,
     experiment_id: str | None = None,
+    use_smote: bool = False,
+    imbalance_strategy: str = "balanced",
 ) -> dict:
     """Run LightGBM training pipeline.
 
     Args:
         force: Retrain even if cache exists
         tune: Run Optuna hyperparameter tuning
-        mode: One of the keys in MODE_CONFIGS (e.g. "all_multiclass", "all_4class", etc.)
+        mode: One of the keys in MODE_CONFIGS
         n_trials: Number of Optuna trials
-        feature_suffix: Override parquet suffix for loading features (e.g. "_4class_alexnet_pca64")
+        feature_suffix: Override parquet suffix for loading features
         experiment_id: Unique ID for saving model/metrics (defaults to mode suffix)
+        use_smote: Apply SMOTE oversampling inside each CV fold
+        imbalance_strategy: "balanced" | "custom_weights" — controls Optuna class weight search
 
     Returns:
         dict with metrics: qwk, accuracy, f1_macro, f1_weighted
@@ -507,8 +540,11 @@ def run(
     params_path = CACHE_DIR / f"lgbm_best_params{out_suffix}.json"
 
     if tune:
-        params = tune_hyperparameters(X_train, y_train, col_names, mode=mode, n_trials=n_trials)
-        # Save under experiment-specific path
+        params = tune_hyperparameters(
+            X_train, y_train, col_names, mode=mode, n_trials=n_trials,
+            imbalance_strategy=imbalance_strategy, use_smote=use_smote,
+        )
+        # Save under experiment-specific path (class_0_weight stored for reference)
         with open(params_path, "w") as f:
             json.dump(params, f, indent=2, default=str)
     elif params_path.exists():
@@ -519,9 +555,17 @@ def run(
     else:
         print("\n  Using default parameters (run with --tune to optimize)")
 
+    # Extract class_0_weight from params if custom_weights strategy was used
+    class_weight_dict: dict | None = None
+    if imbalance_strategy == "custom_weights" and "class_0_weight" in params:
+        w0 = params.pop("class_0_weight")
+        n_cls = config["num_classes"]
+        class_weight_dict = {i: (float(w0) if i == 0 else 1.0) for i in range(n_cls)}
+
     print(f"\nTraining LightGBM with {N_FOLDS}-fold CV...")
     best_model, oof_preds, oof_probs = train_and_evaluate(
-        X_train, y_train, col_names, params, mode=mode
+        X_train, y_train, col_names, params, mode=mode, use_smote=use_smote,
+        class_weight_dict=class_weight_dict,
     )
 
     print_oof_metrics(oof_preds, y_train, mode=mode, oof_probs=oof_probs)

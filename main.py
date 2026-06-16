@@ -24,7 +24,9 @@ def main(
     tune: bool = False,
     n_trials: int = N_TUNING_TRIALS,
     backbone: str = "alexnet",
-    embedding_pca: int = preprocessing.DEFAULT_EMBEDDING_PCA_COMPONENTS
+    embedding_pca: int = preprocessing.DEFAULT_EMBEDDING_PCA_COMPONENTS,
+    use_smote: bool = False,
+    imbalance_strategy: str = "balanced",
 ) -> None:
 
     print("Step 0: Download Data")
@@ -57,6 +59,8 @@ def main(
         n_trials=n_trials,
         feature_suffix=feat_suffix,
         experiment_id=feat_suffix,
+        use_smote=use_smote,
+        imbalance_strategy=imbalance_strategy,
     )
 
     print("\nPipeline complete.")
@@ -97,6 +101,22 @@ if __name__ == "__main__":
             f"Default: 15 when --experiments, {N_TUNING_TRIALS} otherwise."
         ),
     )
+    parser.add_argument(
+        "--use-smote",
+        action="store_true",
+        help="Apply SMOTE oversampling inside each CV fold (requires --tune)",
+    )
+    parser.add_argument(
+        "--imbalance-strategy",
+        choices=["balanced", "custom_weights"],
+        default="balanced",
+        help=(
+            "Class imbalance strategy for Optuna tuning. "
+            "'balanced': tune class_weight (balanced vs None). "
+            "'custom_weights': Optuna tunes class_0_weight in [1.0, 20.0]. "
+            "(default: balanced)"
+        ),
+    )
     args = parser.parse_args()
 
     # Resolve n_trials default based on mode
@@ -111,5 +131,7 @@ if __name__ == "__main__":
         tune=args.tune,
         n_trials=n_trials,
         backbone=args.backbone,
-        embedding_pca=args.embedding_pca
+        embedding_pca=args.embedding_pca,
+        use_smote=args.use_smote,
+        imbalance_strategy=args.imbalance_strategy,
     )

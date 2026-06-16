@@ -13,6 +13,7 @@ export KAGGLE_API_TOKEN=xxxxxxxxxxxxxx
 ## Installation
 
 LightGBM needs `libomp`
-```
+
+```text
 brew install libomp
 ```

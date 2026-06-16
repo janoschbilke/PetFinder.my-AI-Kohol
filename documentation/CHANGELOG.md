@@ -1,5 +1,20 @@
 # Changelog
 
+## Session 1: 15.05
+
+- "Start small, go bigger later"
+  - Only Dog/Cats first
+  - Use Tabular Data first (and maybe the metadatas and senitments), use images later
+  - Start off with Random Forest Classificiation Models
+
+## Session 2: 22.05
+
+- Maybe try without the breed, the amount of information in this might be highly limited a
+- Use only dogs (reduce training set), use only tabular and try to get higher accuracy and keep optimizing the random forest (500 too many trees)
+- Compress vector (reduce feature vector), get an embedding out of the feature vector
+  - embedd breeds into own dense vector (auto encoder for breed?, dimensionality reduction (PCA))
+- Go ahead and try using images/more advanced classifier
+
 ## 05.06.2026
 
 1. Try LGBM instead of Random Forest
@@ -59,3 +74,13 @@
 - Overwrite/dismiss all 0 into 1 -> class 0 is so drastically underrepresented, it cannot be predicted and has precision of around 3% (catastrophically)
 - last straws -> Run embeddings with resNet and effiencnet (often used in the competition), try out different PCA component sizes and run with tune for all of the configs
   Pca component size 64 -> 16 -> 0 (0 must then just be ran with --tune 50 and for the new class mode without the 0 class)
+
+## For last Session: 19.06. Updates
+
+- Last tests were run to determine whether the class imbalance could be addressed
+  - Using custom weight for class 0 (in span of 0 - 20 in hyper parameter tuning)
+  - Using SMOTE to synthetically boost class 0
+- Results yielded:
+  - Using custom weight balances: QWK: 0.3945 on training, 0.342 on test
+  - Using SMOTE: QWK: 0.3961 on training, 0.3495 on test (best score yet)
+- Lastly, we updated and sorted the files, documentation and soure code as finalization

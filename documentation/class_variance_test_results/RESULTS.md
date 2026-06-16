@@ -7,7 +7,7 @@ We validated our tabular feature pipeline by training LightGBM binary classifier
 ## Results Summary
 
 | Mode | Description | Samples | Balance | AUC-ROC | Accuracy | F1-macro |
-|------|-------------|---------|---------|---------|----------|----------|
+| ------ | ------------- | --------- | --------- | --------- | ---------- | ---------- |
 | `dogs_extreme` | Dogs: Same day vs >100 days | 2,584 | 170 vs 2,414 | **0.798** | 0.935 | 0.646 |
 | `dogs_month_vs_100` | Dogs: 8-30 days vs >100 days | 4,578 | 2,164 vs 2,414 | **0.788** | 0.720 | 0.720 |
 | `cats_month_vs_100` | Cats: 8-30 days vs >100 days | 3,656 | 1,873 vs 1,783 | **0.739** | 0.682 | 0.684 |
@@ -65,9 +65,10 @@ python -m src.results_summary
 
 ## Available Modes
 
-```
+```text
 all_multiclass      — All pets, 5 classes (original competition task)
 dogs_extreme        — Dogs: same day (0) vs >100 days (4)
 dogs_month_vs_100   — Dogs: 8-30 days (2) vs >100 days (4)
 dogs_adjacent       — Dogs: 8-30 days (2) vs 31-90 days (3)
 cats_month_vs_100   — Cats: 8-30 days (2) vs >100 days (4)
+```

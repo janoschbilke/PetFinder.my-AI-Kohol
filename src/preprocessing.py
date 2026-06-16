@@ -36,9 +36,6 @@ OHE_DROP_CATEGORIES: dict[str, int] = {
     "State":        41326,
 }
 
-# Explicit category lists for OHE columns whose full value range may not appear in
-# every split (e.g. "0 = Not Specified" values that are rare or absent).
-# State categories are loaded at runtime from state_labels.csv.
 OHE_CATEGORIES: dict[str, list[int]] = {
     "Type":         [1, 2],
     "Gender":       [1, 2, 3],
@@ -50,10 +47,6 @@ OHE_CATEGORIES: dict[str, list[int]] = {
     "FurLength":    [0, 1, 2, 3],
 }
 
-# --- Mode configurations ---
-# Each mode defines a subset of the data and target classes for experimentation.
-# type_filter: 1=Dogs, 2=Cats, None=All
-# classes: which AdoptionSpeed values to keep (relabeled to 0,1,... for the model)
 MODES = {
     "all_multiclass": {
         "description": "All pets, all 5 adoption speed classes (original competition task)",
@@ -175,11 +168,6 @@ def multi_hot_encode(
     skip_zero: bool = True,
     known_values: set[int] | None = None,
 ) -> pd.DataFrame:
-    """Create a multi-hot encoded DataFrame from multiple columns sharing the same value space.
-
-    If *known_values* is provided it defines the complete set of columns to emit,
-    ensuring that values never observed in *df* still produce an all-zero column.
-    """
     if known_values is not None:
         all_values: set[int] = set(known_values)
     else:

@@ -21,4 +21,5 @@ dependencies = [
     "lightgbm>=4.0.0",
     "pyarrow>=24.0.0",
     "optuna>=3.0.0",
+    "imbalanced-learn>=0.12.0",
 ]

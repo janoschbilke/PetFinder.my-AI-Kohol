@@ -53,20 +53,3 @@
 5. PREDICT
 
 > In Total: 58311 Images, 14994 Pets
-
-## Feedback Sessions
-
-### Session 1: 15.05
-
-- "Start small, go bigger later"
-  - Only Dog/Cats first
-  - Use Tabular Data first (and maybe the metadatas and senitments), use images later
-  - Start off with Random Forest Classificiation Models
-
-### Session 2: 22.05
-
-- Maybe try without the breed, the amount of information in this might be highly limited a
-- Use only dogs (reduce training set), use only tabular and try to get higher accuracy and keep optimizing the random forest (500 too many trees)
-- Compress vector (reduce feature vector), get an embedding out of the feature vector
-  - embedd breeds into own dense vector (auto encoder for breed?, dimensionality reduction (PCA))
-- Go ahead and try using images/more advanced classifier

@@ -26,7 +26,6 @@ NUM_BOOST_ROUND = 2000
 EARLY_STOPPING_ROUNDS = 100
 N_TUNING_TRIALS = 50  # Number of Optuna trials for hyperparameter search
 
-# --- Mode configurations ---
 # Must match cache_suffix in preprocessing.py MODES dict.
 MODE_CONFIGS = {
     "all_multiclass": {

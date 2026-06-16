@@ -1,20 +1,3 @@
-"""Analyse the fitted breed-PCA components and try to interpret them.
-
-Loads the cached PCA transformer (`cache/breed_pca.pkl`), reconstructs the
-training breed multi-hot matrix and produces:
-
-- A textual report listing the top positive / negative breed loadings per
-  component, correlations of each PC score with interpretable raw features
-  (Type, MaturitySize, FurLength, Age, Fee, AdoptionSpeed, ...) and example
-  pets at each extreme.
-- A heatmap of those correlations.
-- Bar charts of the top loadings for the first few components.
-- A scree plot of explained variance.
-- Automatic "label suggestions" based on strong correlations.
-
-Outputs go into `outputs/pca_analysis/`.
-"""
-
 from __future__ import annotations
 
 import pickle
@@ -52,10 +35,6 @@ INTERPRETABLE_FEATURES = [
 
 CORR_THRESHOLD = 0.30
 
-
-# ---------------------------------------------------------------------------
-# Small formatting helpers
-# ---------------------------------------------------------------------------
 def _format_breed_name(row: pd.Series) -> str:
     type_str = {1: "Dog", 2: "Cat"}.get(int(row["Type"]), "?")
     return f"{row['BreedName']} ({type_str})"
@@ -71,10 +50,6 @@ def _suggest_label(corrs: pd.Series) -> str:
             parts.append(f"{sign}{feat}({val:+.2f})")
     return ", ".join(parts) if parts else "no strong signal"
 
-
-# ---------------------------------------------------------------------------
-# Data loading and PCA score computation
-# ---------------------------------------------------------------------------
 def _load_pca(pca_path: Path) -> PCA:
     if not pca_path.exists():
         raise FileNotFoundError(
@@ -87,7 +62,6 @@ def _load_pca(pca_path: Path) -> PCA:
         f"{pca.components_.shape[1]} input breed columns"
     )
     return pca
-
 
 def _load_training_data() -> tuple[pd.DataFrame, pd.DataFrame]:
     data_root = get_data_root()
@@ -145,10 +119,6 @@ def _compute_correlations(
                 corr_df.loc[pc, feat] = score_df[pc].corr(train_df[feat])
     return corr_df
 
-
-# ---------------------------------------------------------------------------
-# Report building
-# ---------------------------------------------------------------------------
 def _format_pet_line(
     idx: int,
     pc_name: str,
@@ -267,9 +237,6 @@ def _build_report(
     return "\n".join(lines)
 
 
-# ---------------------------------------------------------------------------
-# Plots
-# ---------------------------------------------------------------------------
 def _plot_correlation_heatmap(
     corr_df: pd.DataFrame, n_components: int, output_dir: Path
 ) -> Path:
@@ -373,10 +340,6 @@ def _plot_scree(pca: PCA, output_dir: Path) -> Path:
     plt.close(fig)
     return path
 
-
-# ---------------------------------------------------------------------------
-# Orchestration
-# ---------------------------------------------------------------------------
 def run(
     output_dir: Path = OUTPUT_DIR, cache_dir: Path = CACHE_DIR
 ) -> None:

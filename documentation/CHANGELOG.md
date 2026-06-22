@@ -51,7 +51,7 @@
 ## 12.06.2026
 
 1. simpler approach & simplify dataset
-![Metrics Summary](results_metrics_summary.png)
+![Metrics Summary](class_variance_test_results/results_metrics_summary.png)
 
 - tested with binary output classes and only dogs / cats for simplicity
 - same day vs. 100+ day yielded "best" result, but only due to high imbalance in classes
@@ -60,9 +60,9 @@
 
 2. pca analysis
 
-![Explained Variance](../outputs/pca_analysis/breed_pca_explained_variance.png)
-![Breed Loadings](../outputs/pca_analysis/breed_pca_loadings.png)
-![Breed Correlations](../outputs/pca_analysis/breed_pca_correlations.png)
+![Explained Variance](pca_analysis/breed_pca_explained_variance.png)
+![Breed Loadings](pca_analysis/breed_pca_loadings.png)
+![Breed Correlations](pca_analysis/breed_pca_correlations.png)
 
 - Since there are always just a maximum of 2 breeds, there are not many semantic correlations
 - Most Breeds have almost zero values in most PCs

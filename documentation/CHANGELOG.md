@@ -84,3 +84,60 @@
   - Using custom weight balances: QWK: 0.3945 on training, 0.342 on test
   - Using SMOTE: QWK: 0.3961 on training, 0.3495 on test (best score yet)
 - Lastly, we updated and sorted the files, documentation and soure code as finalization
+
+## 08.07.2026 — Model evaluation workflow
+
+Added a new `src/evaluation/` package plus `evaluation_main.py` that trains
+and benchmarks 7 model configurations on a single shared stratified train/val
+split so their metrics are directly comparable.
+
+**Models trained:**
+
+1. Random Forest — OHE raw, default params
+2. Random Forest — OHE raw, tuned (Optuna)
+3. LightGBM     — OHE raw, tuned
+4. Random Forest — Breed-PCA, tuned
+5. LightGBM     — Breed-PCA, tuned
+6. LightGBM     — Image embeddings PCA-64, tuned
+7. LightGBM     — Image embeddings PCA-64 + SMOTE, tuned
+
+**Recomputed from scratch on every run** (for comparable training times):
+image embeddings, preprocessing parquets, and hyperparameter tuning.
+
+**Recorded per model:** accuracy, QWK, F1 (macro/weighted), precision/recall
+(macro), training time, tuning time, inference time (total + ms/sample),
+model size on disk, feature count, sample counts, hyperparameters, hostname.
+
+**Outputs** live under `results/<timestamp>[_<tag>]/`:
+
+- `metrics/*.json` — one JSON per model (machine-independent, mergeable)
+- `tuning_logs/*.json` — full Optuna trial history per tuned model
+- `visualizations/` — QWK+Accuracy bar chart, QWK vs Accuracy scatter,
+  training-time bar (log scale), inference-time bar, tuning-time bar,
+  `metrics_summary.csv`
+- `run_config.json`, `split_indices.npz`, `merged_results.csv`
+
+**Multi-machine support:** each machine writes to its own timestamped
+directory. Merging is done via
+`python -m src.evaluation.merge_results --results-dir results` which
+recursively collects all `metrics/*.json` files and rebuilds the plots
++ `merged_results.csv` under `results/_merged/`.
+
+**Usage:**
+
+```bash
+# Everything on one machine
+python evaluation_main.py --n-trials 50 --run-tag desktop
+
+# Split across two machines
+python evaluation_main.py --run-tag machineA \
+    --only model_1_rf_ohe_default --only model_2_rf_ohe_tuned \
+    --only model_3_lgbm_ohe_tuned --only model_4_rf_breedpca_tuned \
+    --only model_5_lgbm_breedpca_tuned
+python evaluation_main.py --run-tag machineB \
+    --only model_6_lgbm_embeddings_tuned \
+    --only model_7_lgbm_embeddings_smote_tuned
+
+# Merge & plot combined
+python -m src.evaluation.merge_results --results-dir results
+```

@@ -23,6 +23,13 @@ def _sort_by_model_id(df: pd.DataFrame) -> pd.DataFrame:
     return df.sort_values("model_id").reset_index(drop=True)
 
 
+_BACKBONE_SHORT = {
+    "alexnet": "AN",
+    "resnet50": "RN50",
+    "efficientnet_b0": "EN-B0",
+}
+
+
 def _short_label(row: pd.Series) -> str:
     algo = "RF" if row["algorithm"] == "RandomForest" else "LGBM"
     fs = {
@@ -30,6 +37,9 @@ def _short_label(row: pd.Series) -> str:
         "breed_pca": "BrdPCA",
         "embeddings_pca64": "EMB",
     }.get(row["feature_set"], row["feature_set"])
+    backbone = row.get("backbone")
+    if fs == "EMB" and backbone:
+        fs = f"EMB/{_BACKBONE_SHORT.get(backbone, backbone)}"
     parts = row["model_id"].split("_")
     n = parts[1] if len(parts) > 1 else ""
     suffix = ""
@@ -174,7 +184,7 @@ def generate_all_plots(run_dir: Path) -> dict[str, Path]:
         paths["tuning_times"] = tp
 
     summary_cols = [
-        "model_id", "model_name", "algorithm", "feature_set",
+        "model_id", "model_name", "algorithm", "feature_set", "backbone",
         "tuned", "smote",
         "accuracy", "qwk", "f1_macro",
         "training_time_seconds", "tuning_time_seconds",

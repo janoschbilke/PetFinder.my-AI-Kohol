@@ -1,0 +1,21 @@
+{
+  "mode": "all_multiclass",
+  "backbones": [
+    "alexnet",
+    "resnet50",
+    "efficientnet_b0"
+  ],
+  "embedding_pca": 64,
+  "n_tuning_trials": 50,
+  "val_size": 0.2,
+  "created_at": "2026-07-09T15:11:48.357761",
+  "models": [
+    "model_1_rf_ohe_default",
+    "model_2_rf_ohe_tuned",
+    "model_3_lgbm_ohe_tuned",
+    "model_4_rf_breedpca_tuned",
+    "model_5_lgbm_breedpca_tuned",
+    "model_6_lgbm_embeddings_tuned",
+    "model_7_lgbm_embeddings_smote_tuned"
+  ]
+}

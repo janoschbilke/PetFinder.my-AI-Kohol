@@ -51,9 +51,14 @@ def _parse_args() -> argparse.Namespace:
                         help="Optuna trials per tuned model (default: 50).")
     parser.add_argument("--mode", default="all_multiclass",
                         help="Preprocessing mode (default: all_multiclass).")
-    parser.add_argument("--backbone", default="alexnet",
+    parser.add_argument("--backbone", default=None,
                         choices=["alexnet", "resnet50", "efficientnet_b0"],
-                        help="CNN backbone for image embeddings.")
+                        help="Single CNN backbone (legacy; prefer --backbones).")
+    parser.add_argument("--backbones", default=None,
+                        help="Comma-separated CNN backbones to compare for the "
+                             "embedding-based models, e.g. "
+                             "'alexnet,resnet50,efficientnet_b0'. Non-embedding "
+                             "models run once regardless. Default: alexnet.")
     parser.add_argument("--embedding-pca", type=int, default=64,
                         help="PCA components for image embeddings (default: 64).")
     parser.add_argument("--val-size", type=float, default=0.2,
@@ -71,13 +76,28 @@ def _parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def _parse_backbones(raw: str | None) -> list[str] | None:
+    if not raw:
+        return None
+    parts = [p.strip() for p in raw.split(",") if p.strip()]
+    valid = {"alexnet", "resnet50", "efficientnet_b0"}
+    for p in parts:
+        if p not in valid:
+            raise SystemExit(
+                f"Invalid backbone '{p}'. Choose from: {sorted(valid)}"
+            )
+    return parts or None
+
+
 def main() -> None:
     args = _parse_args()
+    backbones = _parse_backbones(args.backbones)
 
     run_dir = run_workflow(
         n_trials=args.n_trials,
         mode=args.mode,
         backbone=args.backbone,
+        backbones=backbones,
         embedding_pca=args.embedding_pca,
         val_size=args.val_size,
         force_preprocess=not args.no_force_preprocess,

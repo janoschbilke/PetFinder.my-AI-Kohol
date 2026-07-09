@@ -141,3 +141,53 @@ python evaluation_main.py --run-tag machineB \
 # Merge & plot combined
 python -m src.evaluation.merge_results --results-dir results
 ```
+
+### Refactor — reuse existing implementations
+
+The initial version of `src/evaluation/trainers.py` implemented its own
+Random Forest / LightGBM training loops. That has now been refactored
+to **delegate** to the existing production code:
+
+- **LightGBM training** → `src.lgbm.train_and_evaluate`
+  (5-fold CV, early stopping, per-fold SMOTE, class weights — identical
+  behaviour to `main.py`).
+- **LightGBM tuning**   → `src.lgbm.tune_hyperparameters`
+  (Optuna, 5-fold CV inside each trial).
+- **Random Forest training** → mirrors `src.random_forest.train_and_evaluate`
+  (5-fold CV with `sample_weight="balanced"`, using
+  `src.random_forest.RF_PARAMS` as defaults). Refactored inline
+  because the upstream function doesn't accept custom params, but the
+  logic is a 1:1 copy.
+- **Random Forest tuning** → local Optuna search (upstream has no RF
+  tuning), 5-fold CV per trial, matching the LGBM tuning style.
+
+Metrics are now computed from **out-of-fold predictions** across the
+80% training slice, and inference time is benchmarked on the held-out
+20% validation slice using the best CV model.
+
+Also fixed: LightGBM's "X does not have valid feature names" warning
+during inference by wrapping the val features in a
+`pd.DataFrame(..., columns=feature_names)` before calling `.predict()`.
+
+### Backbone comparison
+
+`evaluation_main.py` now accepts a comma-separated `--backbones` flag
+so multiple CNN backbones (alexnet, resnet50, efficientnet_b0) can be
+compared in a single run.
+
+- Non-embedding models (1-5) are trained **once** using the first
+  backbone as the preprocessing anchor.
+- Embedding models (6 & 7) are duplicated per backbone. In multi-backbone
+  runs, each variant is saved as
+  `model_6_lgbm_embeddings_tuned_<backbone>.json` (and same for 7) so
+  the JSON files don't overwrite each other.
+- Each result carries a `backbone` field; visualisations tag embedding
+  models with the backbone short name (`AN`, `RN50`, `EN-B0`) so all
+  variants show up in the same charts.
+
+Usage:
+
+```bash
+python evaluation_main.py --backbones alexnet,resnet50,efficientnet_b0 \
+    --n-trials 50 --run-tag desktop
+```

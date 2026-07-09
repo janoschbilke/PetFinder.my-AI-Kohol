@@ -26,6 +26,7 @@ class ModelResult:
     feature_set: str         # "OHE_raw" | "BreedPCA" | "ImageEmbeddingsPCA64"
     tuned: bool
     smote: bool = False
+    backbone: str | None = None  # CNN backbone (embedding models only)
 
     # Metrics
     accuracy: float | None = None

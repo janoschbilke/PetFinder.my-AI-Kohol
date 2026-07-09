@@ -1,0 +1,2 @@
+model_id,model_name,algorithm,feature_set,tuned,smote,accuracy,qwk,f1_macro,training_time_seconds,tuning_time_seconds,inference_time_ms_per_sample,n_features,n_train_samples,n_val_samples,hostname
+model_1_rf_ohe_default,"Random Forest (OHE raw, default)",RandomForest,ohe_raw,False,False,0.39644822411205605,0.33819185305947097,0.33410246661296383,25.458026541979052,,0.056904384796251456,365,11994,2999,JVGKQPFW53
